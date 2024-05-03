@@ -33,7 +33,7 @@ fun BottomNavBar(
                 modifier = Modifier.weight(1f),
                 imageVector = Icons.Outlined.AccountCircle,
             ) {
-                
+                navController.navigate(route = Screen.Role.route)
             },
 
             BottomNavItem(

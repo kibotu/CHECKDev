@@ -111,35 +111,6 @@ fun OnBoardingScreen(
                 )
 
             }
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 34.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(route = Screen.Role.route)
-                }
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    text = "Create role",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 19.sp
-                    )
-                )
-
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    imageVector = Icons.Default.ArrowForward,
-                    colorFilter = ColorFilter.tint(color = Color.White),
-                    contentDescription = ""
-                )
-
-            }
         }
     }
 }
