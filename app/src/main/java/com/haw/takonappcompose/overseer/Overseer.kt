@@ -1,5 +1,6 @@
 package com.haw.takonappcompose.overseer
 
+import com.haw.takonappcompose.database.AnswerEntity
 import com.haw.takonappcompose.models.ChatAnswer
 import com.haw.takonappcompose.models.Message
 import com.haw.takonappcompose.models.Question
@@ -43,7 +44,7 @@ class Overseer(private val repository: Repository) {
 
         val result: ChatAnswer? = null
         try {
-            val response: Resource.Success<ChatAnswer> = repository.chat(
+            val response = repository.chat(
                 Question(
                     model = role.model,
                     messages = listOf(
@@ -54,11 +55,23 @@ class Overseer(private val repository: Repository) {
                     ),
                     stream = false
                 )
-            ) as Resource.Success
-            return response.data
+            )
+
+            // save answer
+            if (response is Resource.Success) {
+                repository.addAnswer(
+                    answerEntity = AnswerEntity(
+                        role = "assistant",
+                        content = response.data.message?.content
+                    )
+                )
+
+                return response.data
+            }
         } catch (e: Exception) {
             Timber.e(e)
         }
+
 
         return requireNotNull(result)
     }

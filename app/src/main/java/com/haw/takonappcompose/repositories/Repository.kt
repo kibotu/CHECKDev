@@ -89,6 +89,9 @@ class Repository(
     suspend fun addAnswer(answer: Message) = withContext(Dispatchers.IO) {
         answerDao.addAnswer(AnswerEntity(role = answer.role, content = answer.content))
     }
+    suspend fun addAnswer(answerEntity: AnswerEntity) = withContext(Dispatchers.IO) {
+        answerDao.addAnswer(answerEntity)
+    }
 
     suspend fun clear() = withContext(Dispatchers.IO) {
         answerDao.clear()
