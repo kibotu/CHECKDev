@@ -26,10 +26,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +57,7 @@ fun CreateRoleScreen(
     val (biasInput, setBiasInput) = remember { mutableStateOf("") }
     val (roleInput, setRoleInput) = remember { mutableStateOf("") }
     val (temperatureInput, setTemperatureInput) = remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -169,12 +172,22 @@ fun CreateRoleScreen(
                     && temperatureInput.isNotBlank()
                     )
                 {
+                    isError = false
                     viewModel.addRole()
                     navController.popBackStack()
+                } else {
+                    isError = true
                 }
             }
         ) {
             Text("Create role")
+        }
+
+        if (isError) {
+            Text(
+                text = "Please fill out all fields in order to submit",
+                color = Color.Red
+            )
         }
     }
 }
