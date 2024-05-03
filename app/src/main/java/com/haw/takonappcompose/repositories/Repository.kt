@@ -22,14 +22,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class Repository(
     private val api: Api,
     private val answerDao: AnswerDao,
     private val roleDao: RoleDao,
     private val scenarioDao: ScenarioDao,
     private val phaseDao: PhaseDao,
-    private val actionDao: ActionDao
+    private val actionDao: ActionDao,
 ) {
 
     init {
@@ -45,18 +44,18 @@ class Repository(
 
     suspend fun chat(
         prevQuestion: List<Message>,
-        question: String
+        question: String,
     ): Resource<ChatAnswer> {
         try {
             api.chat(
                 question = Question(
                     messages = prevQuestion + Message(
                         role = "user",
-                        content = question
+                        content = question,
                     ),
                     model = "llama3",
-                    stream = false
-                )
+                    stream = false,
+                ),
             ).also { response ->
                 return Resource.Success(data = response)
             }
@@ -129,7 +128,7 @@ class Repository(
             bias = "world conqueror",
             icon = "bla",
             role = "CEO",
-            temperature = "0.7"
+            temperature = "0.7",
         ).let { addRole(it) }
 
         RoleEntity(
@@ -139,7 +138,7 @@ class Repository(
             bias = "world conquerors helper",
             icon = "bla",
             role = "PM",
-            temperature = "0.2"
+            temperature = "0.2",
         ).let { addRole(it) }
 
         RoleEntity(
@@ -149,7 +148,7 @@ class Repository(
             bias = "nerdy worker",
             icon = "bla",
             role = "PROGRAMMER",
-            temperature = "0.9"
+            temperature = "0.9",
         ).let { addRole(it) }
 
         RoleEntity(
@@ -159,7 +158,7 @@ class Repository(
             bias = "picky tester",
             icon = "bla",
             role = "QA",
-            temperature = "0.9"
+            temperature = "0.9",
         ).let { addRole(it) }
     }
 
