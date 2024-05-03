@@ -17,7 +17,7 @@ fun MainNavGraph(modifier : Modifier = Modifier, navController: NavHostControlle
         modifier = modifier,
         navController = navController,
         route = "main_route",
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Message.route
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(navController = navController)

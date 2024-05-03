@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.haw.takonappcompose.R
 import com.haw.takonappcompose.ui.theme.GrayColor
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun ReceiverMessageItemCard(
@@ -57,10 +58,9 @@ fun ReceiverMessageItemCard(
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp, bottomEnd = 25.dp),
             color = GrayColor
         ) {
-            Text(
+            MarkdownText(
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 24.dp),
-                text = message,
-                style = MaterialTheme.typography.labelLarge.copy(color = Color(0xFF505050))
+                markdown = message,
             )
         }
     }

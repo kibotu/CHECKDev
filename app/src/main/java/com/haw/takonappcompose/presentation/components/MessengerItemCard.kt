@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.haw.takonappcompose.ui.theme.BluePrimary
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun MessengerItemCard(
@@ -24,13 +25,11 @@ fun MessengerItemCard(
         color = BluePrimary,
         shape = RoundedCornerShape(topStart = 25.dp, bottomEnd = 25.dp, bottomStart = 25.dp)
     ) {
-        Text(
+        MarkdownText(
             modifier = Modifier
                 .wrapContentSize()
                 .padding(horizontal = 24.dp, vertical = 18.dp),
-            text = message,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelLarge.copy(color = Color.White)
+            markdown = message
         )
     }
 }
