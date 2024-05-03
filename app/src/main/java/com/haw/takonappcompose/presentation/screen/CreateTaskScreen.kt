@@ -45,7 +45,7 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.haw.takonappcompose.R
-import com.haw.takonappcompose.models.Role
+import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.viewmodel.CreateTaskViewModel
 import kotlinx.coroutines.launch
 
@@ -59,17 +59,17 @@ fun CreateTaskScreen(
 
 @Composable
 fun SimplePhase(
-    availableRoles: List<Role>,
-    role1: Role? = null,
-    role2: Role? = null,
+    availableRoles: List<RoleEntity>,
+    role1: RoleEntity? = null,
+    role2: RoleEntity? = null,
     modifier: Modifier = Modifier,
 ) {
-    var agent1: Role? by remember {
+    var agent1: RoleEntity? by remember {
         mutableStateOf(
             role1,
         )
     }
-    var agent2: Role? by remember {
+    var agent2: RoleEntity? by remember {
         mutableStateOf(
             role2,
         )
@@ -105,8 +105,8 @@ private fun Arrow(
 @Composable
 private fun SelectRole(
     modifier: Modifier = Modifier,
-    availableRoles: List<Role>,
-    onSelect: (Role) -> Unit,
+    availableRoles: List<RoleEntity>,
+    onSelect: (RoleEntity) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
@@ -191,19 +191,23 @@ private fun SelectRole(
 }
 
 val roles = listOf(
-    Role(
+    RoleEntity(
         model = "doming",
         ip = "conclusionemque",
         icon = "lorem",
         bias = "ceteros",
         role = "parturient",
+        id = "",
+        temperature = "",
     ),
-    Role(
+    RoleEntity(
         model = "repudiandae",
         ip = "mel",
         icon = "a",
         bias = "ipsum",
         role = "inani",
+        id = "",
+        temperature = "",
     ),
 )
 
