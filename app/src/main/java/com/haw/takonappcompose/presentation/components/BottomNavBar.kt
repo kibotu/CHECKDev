@@ -68,7 +68,7 @@ fun BottomNavBar(
                     .weight(1f),
                 imageVector = Icons.Outlined.Settings,
                 currentDestination = currentDestination,
-                ownDestination = "placeholder"
+                ownDestination = Screen.CreateTask.route
             ) {
                 navController.navigate(route = Screen.CreateTask.route)
             },
