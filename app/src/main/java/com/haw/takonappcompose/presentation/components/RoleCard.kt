@@ -26,13 +26,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haw.takonappcompose.models.Role
+import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.ui.theme.TakonAppComposeTheme
 
 @Composable
 fun RoleCard(
-    role: Role,
+    roleEntity: RoleEntity,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.wrapContentSize()) {
@@ -66,17 +66,17 @@ fun RoleCard(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(role.role, fontSize = 22.sp)
+                        Text(roleEntity.role, fontSize = 22.sp)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Text(
-                            text = "(${role.model})",
+                            text = "(${roleEntity.model})",
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f)
                         )
                     }
 
-                    Text(text = role.bias)
+                    Text(text = roleEntity.bias)
                 }
             }
         }
@@ -88,12 +88,14 @@ fun RoleCard(
 fun RoleCardPreview() {
     TakonAppComposeTheme {
         RoleCard(
-            role = Role(
+            roleEntity = RoleEntity(
+                id = "CEO",
                 model = "llama3",
                 ip = "bla",
                 bias = "world conqueror",
                 icon = "bla",
-                role = "CEO"
+                role = "CEO",
+                temperature = "0.7"
             )
         )
     }
