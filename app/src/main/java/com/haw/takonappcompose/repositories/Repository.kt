@@ -56,4 +56,8 @@ class Repository(private val api: Api, private val dao: AnswerDao) {
         dao.addAnswer(AnswerEntity(role = answer.role, content = answer.content))
     }
 
+    suspend fun clear() {
+        dao.clear()
+    }
+
 }

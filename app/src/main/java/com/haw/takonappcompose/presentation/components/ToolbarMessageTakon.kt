@@ -14,26 +14,32 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Divider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.haw.takonappcompose.R
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.ui.theme.GrayColor
 import com.haw.takonappcompose.ui.theme.GreenColor
+import com.haw.takonappcompose.viewmodel.TakonViewModel
 
 @Composable
 fun ToolbarMessageTakon(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    clear: () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -93,6 +99,17 @@ fun ToolbarMessageTakon(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(onClick = { clear() }) {
+                Image(
+                    modifier = Modifier.size(32.dp),
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(BluePrimary)
+                )
+            }
         }
 
         Divider(
@@ -106,6 +123,6 @@ fun ToolbarMessageTakon(
 @Preview
 @Composable
 fun ToolbarMessageTakonPreview() {
-    ToolbarMessageTakon()
+    ToolbarMessageTakon(clear = {})
 }
 

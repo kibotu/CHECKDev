@@ -75,4 +75,12 @@ class TakonViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun clear() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repository.clear()
+            }
+        }
+    }
+
 }

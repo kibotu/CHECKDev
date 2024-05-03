@@ -14,4 +14,6 @@ interface AnswerDao {
     @Query("SELECT * FROM `answers`")
     fun getAnswer(): Flow<List<AnswerEntity>>
 
+    @Query("DELETE FROM `answers`")
+    fun clear()
 }

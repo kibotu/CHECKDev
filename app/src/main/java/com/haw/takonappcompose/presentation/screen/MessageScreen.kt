@@ -45,7 +45,9 @@ fun MessageScreen(
     Scaffold(
         containerColor = Color.White,
         topBar = {
-            ToolbarMessageTakon()
+            ToolbarMessageTakon(
+                clear = { viewModel.clear() }
+            )
         },
         floatingActionButton = {
             WriteMessageCard(
