@@ -1,6 +1,8 @@
 package com.haw.takonappcompose.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +29,8 @@ import dev.jeziellago.compose.markdowntext.MarkdownText
 @Composable
 fun ReceiverMessageItemCard(
     modifier: Modifier = Modifier,
-    message: String = ""
+    message: String = "",
+    role: String = ""
 ) {
     Row(
         modifier = modifier
@@ -56,10 +61,20 @@ fun ReceiverMessageItemCard(
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp, bottomEnd = 25.dp),
             color = GrayColor
         ) {
-            MarkdownText(
-                modifier = Modifier.padding(horizontal = 14.dp, vertical = 24.dp),
-                markdown = message,
-            )
+            Box(modifier = Modifier.padding(top = 4.dp)) {
+                MarkdownText(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 24.dp),
+                    markdown = message,
+                )
+
+                Text(
+                    text = role,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 16.dp),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f)
+                )
+            }
         }
     }
 }
@@ -68,7 +83,9 @@ fun ReceiverMessageItemCard(
 @Composable
 fun ReceiverMessageItemPreview() {
     ReceiverMessageItemCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        message = "This is my message",
+        role = "Programmer"
     )
 }
 

@@ -9,11 +9,11 @@ class ActionEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo("roleId")
-    val roleId: String,
+    var roleId: String,
     @ColumnInfo("input")
-    val input: String,
+    var input: String?,
     @ColumnInfo("output")
-    val output: String,
+    var output: String?,
     @ColumnInfo("phase_id")
-    val phaseId: Int
+    var phaseId: Int
 )

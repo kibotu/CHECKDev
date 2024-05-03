@@ -74,7 +74,10 @@ fun MessageScreen(
                                 message = message.content
                             )
                         } else {
-                            ReceiverMessageItemCard(message = message.content)
+                            ReceiverMessageItemCard(
+                                message = message.content,
+                                role = message.role,
+                            )
                         }
                     }
                 }
