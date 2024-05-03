@@ -82,11 +82,12 @@ class Repository(
         scenarioDao.upsert(scenario)
     }
 
+    suspend fun getScenario(id: Int): ScenarioEntity? = withContext(Dispatchers.IO) {
+        scenarioDao.getScenarioById(id)
+    }
+
     suspend fun addPhase(phase: PhaseEntity) = withContext(Dispatchers.IO) {
-        val scenario = scenarioDao.getScenarioById(1) ?: ScenarioEntity(
-            id = 1
-        )
-        scenarioDao.upsert(scenario)
+        val scenario = scenarioDao.getScenarioById(1) ?: return@withContext
         phase.scenarioId = scenario.id
         phaseDao.upsert(phase)
     }

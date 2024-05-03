@@ -8,8 +8,8 @@ import timber.log.Timber
 
 class Overseer(private val repository: Repository) {
 
-    suspend fun ScenarioEntity.run() {
-        val phases = repository.getPhasesById(id)
+    suspend fun run(scenario: ScenarioEntity) {
+        val phases = repository.getPhasesById(scenario.id)
         for (phase in phases) {
             phase.run()
         }
