@@ -15,5 +15,5 @@ class ActionEntity(
     @ColumnInfo("output")
     val output: String,
     @ColumnInfo("phase_id")
-    val phaseId: String
+    val phaseId: Int
 )

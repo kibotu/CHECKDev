@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.haw.takonappcompose.database.AppDatabase
 import com.haw.takonappcompose.json.json
 import com.haw.takonappcompose.network.Api
+import com.haw.takonappcompose.overseer.Overseer
 import com.haw.takonappcompose.repositories.Repository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -17,7 +18,7 @@ import retrofit2.Retrofit
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class TakonApp : Application() {
+class OverseerApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -61,7 +62,7 @@ class TakonApp : Application() {
                 single {
                     Room
                         .databaseBuilder(
-                            this@TakonApp,
+                            this@OverseerApp,
                             AppDatabase::class.java,
                             "db_takon"
                         ).fallbackToDestructiveMigration()
@@ -80,6 +81,9 @@ class TakonApp : Application() {
                         actionDao = database.actionDao(),
                     )
 
+                }
+                single {
+                    Overseer(get())
                 }
             })
         }
