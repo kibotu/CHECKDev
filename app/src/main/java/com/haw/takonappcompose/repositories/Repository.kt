@@ -60,4 +60,8 @@ class Repository(private val api: Api, private val dao: AnswerDao) {
         dao.clear()
     }
 
+    suspend fun addRole() {
+        //dao.addRole()
+    }
+
 }
