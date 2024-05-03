@@ -12,7 +12,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.context.startKoin
-import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -72,7 +71,7 @@ class TakonApp : Application() {
                     val api: Api = get()
                     val database: AppDatabase = get()
 
-                    Repository(api = api, dao = database.answerDao())
+                    Repository(api = api, answerDao = database.answerDao(), roleDao = database.roleDao())
 
                 }
             })

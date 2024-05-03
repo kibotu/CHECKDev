@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.haw.takonappcompose.R
+import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.navigation.Screen
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.viewmodel.CreateRoleViewModel
@@ -51,6 +52,7 @@ fun CreateRoleScreen(
     navController: NavController,
     viewModel: CreateRoleViewModel = viewModel()
 ) {
+    val (nameInput, setNameInput) = remember { mutableStateOf("") }
     val (modelInput, setModelInput) = remember { mutableStateOf("") }
     val (ipInput, setIpInput) = remember { mutableStateOf("") }
     val (iconInput, setIconInput) = remember { mutableStateOf("") }
@@ -66,6 +68,22 @@ fun CreateRoleScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TextField(
+            modifier = Modifier
+                .background(color = Color.White)
+                .fillMaxWidth(),
+            value = nameInput,
+            onValueChange = { value ->
+                setNameInput(value)
+            },
+            placeholder = {
+                Text(
+                    text = "Enter name",
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        )
+
         TextField(
             modifier = Modifier
                 .background(color = Color.White)
@@ -164,7 +182,8 @@ fun CreateRoleScreen(
 
         OutlinedButton(
             onClick = {
-                if (modelInput.isNotBlank()
+                if (nameInput.isNotBlank()
+                    && modelInput.isNotBlank()
                     && ipInput.isNotBlank()
                     && iconInput.isNotBlank()
                     && biasInput.isNotBlank()
@@ -173,7 +192,17 @@ fun CreateRoleScreen(
                     )
                 {
                     isError = false
-                    viewModel.addRole()
+                    viewModel.addRole(
+                        RoleEntity(
+                            id = nameInput,
+                            model = modelInput,
+                            ip = ipInput,
+                            icon = iconInput,
+                            bias = biasInput,
+                            role = roleInput,
+                            temperature = temperatureInput
+                        )
+                    )
                     navController.popBackStack()
                 } else {
                     isError = true
