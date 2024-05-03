@@ -1,12 +1,16 @@
 package com.haw.takonappcompose.presentation.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -56,11 +61,15 @@ fun CreateTaskScreen(
     navController: NavController,
     viewModel: CreateTaskViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
-    Column {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(50.dp),
+    ) {
         TaskUI()
         ScenarioUI(
             availableRoles = roles,
             phases = phases,
+            addPhase = viewModel::addPhaseToScenarioEnd,
+            onUpdatePhase = viewModel::updatePhase,
         )
     }
 }
@@ -79,24 +88,44 @@ private fun TaskUI() {
 private fun ScenarioUI(
     availableRoles: List<RoleEntity>,
     phases: List<PhasePresentationModel>,
+    addPhase: () -> Unit,
+    onUpdatePhase: (RoleEntity, Int) -> Unit,
 ) {
-    phases.forEach {
-        Phase(
-            actions = it.actions,
-            availableRoles = availableRoles,
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        phases.forEachIndexed { index, phase ->
+            Phase(
+                actions = phase.actions,
+                availableRoles = availableRoles,
+                modifier = Modifier.background(
+                    if (index % 2 == 0) Color.LightGray else Color.White,
+                ),
+                onUpdatePhase = onUpdatePhase,
+            )
+            if (index != phases.lastIndex) {
+                LongArrow(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+            }
+        }
+        AddPhase(
+            addPhase = addPhase,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
         )
     }
-    AddPhase()
 }
 
 @Composable
 private fun AddPhase(
     modifier: Modifier = Modifier,
+    addPhase: () -> Unit,
 ) {
     Icon(
-        modifier = modifier,
+        modifier = modifier.clickable { addPhase() }.size(40.dp),
         painter = painterResource(id = R.drawable.add_circle),
         contentDescription = null,
+        tint = Color.Green,
     )
 }
 
@@ -104,17 +133,21 @@ private fun AddPhase(
 private fun Phase(
     availableRoles: List<RoleEntity>,
     actions: List<Action>,
+    modifier: Modifier = Modifier,
+    onUpdatePhase: (RoleEntity, Int) -> Unit,
 ) {
-    Column {
+    Column(
+        modifier = modifier.border(width = 1.dp, color = Color.Black)
+            .padding(5.dp),
+    ) {
         actions.forEachIndexed { index, action ->
             SelectRole(
                 availableRoles = availableRoles,
-                onSelect = { },
+                onSelect = { onUpdatePhase(it, index) },
             )
             if (index != actions.lastIndex) {
                 Arrow(
-                    Modifier.rotate(90F)
-                        .align(Alignment.CenterHorizontally),
+                    Modifier.align(Alignment.CenterHorizontally),
                 )
             }
         }
@@ -159,9 +192,18 @@ private fun Arrow(
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        modifier = modifier.widthIn(min = 20.dp),
+        modifier = modifier.widthIn(min = 20.dp).rotate(90f),
         painter = painterResource(id = R.drawable.arrow_right),
         contentDescription = null,
+    )
+}
+
+@Composable
+private fun LongArrow(
+    modifier: Modifier = Modifier,
+) {
+    Arrow(
+        modifier = modifier.scale(2f),
     )
 }
 
@@ -282,23 +324,31 @@ val demoActions = listOf(
     Action(
         role = roles.get(1),
     ),
+    Action(
+        role = roles.get(1),
+    ),
 )
 
 val phases = listOf(
     PhasePresentationModel(
         actions = demoActions,
     ),
+    PhasePresentationModel(
+        actions = demoActions.takeLast(2),
+    ),
 )
 
 @Preview
 @Composable
 fun JobConfigurationScreenPreview() {
-    Box() {
+    Box {
         Column {
             TaskUI()
             ScenarioUI(
                 availableRoles = roles,
                 phases = phases,
+                addPhase = {},
+                onUpdatePhase = { _, _ -> },
             )
         }
     }
@@ -307,7 +357,7 @@ fun JobConfigurationScreenPreview() {
 @Preview
 @Composable
 fun JobConfigurationScreenPreviewOld() {
-    Box() {
+    Box {
         SimplePhase(
             availableRoles = roles,
         )
