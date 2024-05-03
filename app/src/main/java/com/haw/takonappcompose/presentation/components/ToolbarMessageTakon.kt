@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
@@ -26,15 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import com.haw.takonappcompose.R
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.ui.theme.GrayColor
 import com.haw.takonappcompose.ui.theme.GreenColor
-import com.haw.takonappcompose.viewmodel.TakonViewModel
 
 @Composable
 fun ToolbarMessageTakon(
@@ -50,11 +46,6 @@ fun ToolbarMessageTakon(
                 .background(color = Color.White)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
         ) {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = ""
-            )
 
             Image(
                 modifier = Modifier
@@ -68,7 +59,7 @@ fun ToolbarMessageTakon(
                 modifier = Modifier.padding(start = 20.dp)
             ) {
                 Text(
-                    text = "TakonGPT",
+                    text = "CHECKDev",
                     fontSize = 20.sp,
                     color = BluePrimary,
                     style = MaterialTheme.typography.titleLarge.copy(
@@ -119,10 +110,3 @@ fun ToolbarMessageTakon(
         )
     }
 }
-
-@Preview
-@Composable
-fun ToolbarMessageTakonPreview() {
-    ToolbarMessageTakon(clear = {})
-}
-

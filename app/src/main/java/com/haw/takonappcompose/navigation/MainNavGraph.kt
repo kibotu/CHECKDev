@@ -1,6 +1,7 @@
 package com.haw.takonappcompose.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,8 +12,9 @@ import com.haw.takonappcompose.presentation.screen.RoleScreen
 import com.haw.takonappcompose.presentation.screen.SplashScreen
 
 @Composable
-fun MainNavGraph(navController: NavHostController) {
+fun MainNavGraph(modifier : Modifier = Modifier, navController: NavHostController) {
     NavHost(
+        modifier = modifier,
         navController = navController,
         route = "main_route",
         startDestination = Screen.Splash.route

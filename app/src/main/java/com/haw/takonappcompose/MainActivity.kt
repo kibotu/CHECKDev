@@ -7,14 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.haw.takonappcompose.navigation.MainNavGraph
 import com.haw.takonappcompose.presentation.components.BottomNavBar
-import com.haw.takonappcompose.presentation.screen.SplashScreen
 import com.haw.takonappcompose.ui.theme.TakonAppComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,8 +23,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column {
-                        MainNavGraph(navController = rememberNavController())
+                    Column() {
+                        MainNavGraph(
+                            modifier = Modifier.weight(1f),
+                            navController = rememberNavController()
+                        )
                         BottomNavBar()
                     }
                 }
