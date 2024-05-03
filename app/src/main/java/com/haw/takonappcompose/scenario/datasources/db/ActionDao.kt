@@ -2,14 +2,14 @@ package com.haw.takonappcompose.scenario.datasources.db
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Upsert
 
 @Dao
 interface ActionDao {
 
-    @Insert
-    suspend fun insert(action: ActionEntity)
+    @Upsert
+    suspend fun upsert(action: ActionEntity)
 
     @Delete
     suspend fun delete(action: ActionEntity)

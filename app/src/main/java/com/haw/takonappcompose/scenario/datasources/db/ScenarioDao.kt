@@ -1,16 +1,19 @@
 package com.haw.takonappcompose.scenario.datasources.db
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Upsert
+import retrofit2.http.GET
 
 @Dao
 interface ScenarioDao {
 
-    @Insert
-    suspend fun add(scenario: ScenarioEntity)
+    @Upsert
+    suspend fun upsert(scenario: ScenarioEntity)
 
 //    @Query("SELECT * FROM `roles`")
 //    fun getScenarioById(): Flow<List<ScenarioEntity>>
+
+    @Query("SELECT * FROM `scenarios` WHERE id = :id")
+    suspend fun getScenarioById(id: Int): ScenarioEntity?
 }

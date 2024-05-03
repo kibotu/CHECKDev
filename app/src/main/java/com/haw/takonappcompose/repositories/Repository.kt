@@ -10,10 +10,15 @@ import com.haw.takonappcompose.models.Question
 import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.network.Api
 import com.haw.takonappcompose.scenario.datasources.db.ActionDao
+import com.haw.takonappcompose.scenario.datasources.db.ActionEntity
 import com.haw.takonappcompose.scenario.datasources.db.PhaseDao
+import com.haw.takonappcompose.scenario.datasources.db.PhaseEntity
 import com.haw.takonappcompose.scenario.datasources.db.ScenarioDao
+import com.haw.takonappcompose.scenario.datasources.db.ScenarioEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 
 class Repository(
@@ -55,11 +60,11 @@ class Repository(
         }
     }
 
-    suspend fun addAnswer(answer: Message) {
+    suspend fun addAnswer(answer: Message) = withContext(Dispatchers.IO) {
         answerDao.addAnswer(AnswerEntity(role = answer.role, content = answer.content))
     }
 
-    suspend fun clear() {
+    suspend fun clear() = withContext(Dispatchers.IO) {
         answerDao.clear()
     }
 
@@ -67,8 +72,28 @@ class Repository(
         return roleDao.getRoles()
     }
 
-    suspend fun addRole(roleEntity: RoleEntity) {
+    suspend fun addRole(roleEntity: RoleEntity) = withContext(Dispatchers.IO) {
         roleDao.addRole(roleEntity)
     }
 
+    // region scenarios
+
+    suspend fun addScenario(scenario: ScenarioEntity) = withContext(Dispatchers.IO) {
+        scenarioDao.upsert(scenario)
+    }
+
+    suspend fun addPhase(phase: PhaseEntity) = withContext(Dispatchers.IO) {
+        val scenario = scenarioDao.getScenarioById(1) ?: ScenarioEntity(
+            id = 1
+        )
+        scenarioDao.upsert(scenario)
+        phase.scenarioId = scenario.id
+        phaseDao.upsert(phase)
+    }
+
+    suspend fun addAction(action: ActionEntity) {
+        actionDao.upsert(action)
+    }
+
+    // endregion
 }
