@@ -71,7 +71,14 @@ class TakonApp : Application() {
                     val api: Api = get()
                     val database: AppDatabase = get()
 
-                    Repository(api = api, answerDao = database.answerDao(), roleDao = database.roleDao())
+                    Repository(
+                        api = api,
+                        answerDao = database.answerDao(),
+                        roleDao = database.roleDao(),
+                        scenarioDao = database.scenarioDao(),
+                        phaseDao = database.phaseDao(),
+                        actionDao = database.actionDao(),
+                    )
 
                 }
             })

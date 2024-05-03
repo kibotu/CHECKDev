@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 interface AnswerDao {
 
     @Insert
-    fun addAnswer(answerEntity: AnswerEntity)
+    suspend fun addAnswer(answerEntity: AnswerEntity)
 
     @Query("SELECT * FROM `answers`")
     fun getAnswer(): Flow<List<AnswerEntity>>
 
     @Query("DELETE FROM `answers`")
-    fun clear()
+    suspend fun clear()
 }
