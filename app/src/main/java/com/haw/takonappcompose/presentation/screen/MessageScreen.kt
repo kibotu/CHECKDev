@@ -41,7 +41,7 @@ fun MessageScreen(
 
     LaunchedEffect(key1 = messages.size) {
         if (messages.isNotEmpty()) {
-            scrollState.animateScrollToItem(messages.size - 1)
+            scrollState.scrollToItem(messages.size - 1, 1)
         }
     }
 
@@ -70,7 +70,7 @@ fun MessageScreen(
                     items(messages) { message ->
                         if (message.fromUser) {
                             MessengerItemCard(
-                                modifier = Modifier.align(Alignment.End),
+                                modifier = Modifier.align(Alignment.End).padding(bottom = 24.dp),
                                 message = message.content
                             )
                         } else {
