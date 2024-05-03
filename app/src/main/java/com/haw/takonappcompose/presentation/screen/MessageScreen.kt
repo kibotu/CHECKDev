@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.haw.takonappcompose.models.fromUser
+import com.haw.takonappcompose.presentation.components.BottomNavBar
 import com.haw.takonappcompose.presentation.components.MessengerItemCard
 import com.haw.takonappcompose.presentation.components.ReceiverMessageItemCard
 import com.haw.takonappcompose.presentation.components.ToolbarMessageTakon
@@ -49,6 +50,7 @@ fun MessageScreen(
                 clear = { viewModel.clear() }
             )
         },
+        bottomBar = { BottomNavBar() },
         floatingActionButton = {
             WriteMessageCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
