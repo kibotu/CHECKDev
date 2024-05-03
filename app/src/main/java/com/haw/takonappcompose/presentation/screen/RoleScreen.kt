@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.haw.takonappcompose.presentation.components.RoleCard
+import com.haw.takonappcompose.navigation.Screen
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.viewmodel.RoleViewModel
 
@@ -43,7 +44,7 @@ fun RoleScreen(
     Scaffold(
         containerColor = Color.White,
         floatingActionButton = {
-            IconButton(onClick = { viewModel.addRole() }) {
+            IconButton(onClick = { navController.navigate(route = Screen.CreateRole.route) }) {
                 Image(
                     modifier = Modifier.size(32.dp),
                     imageVector = Icons.Outlined.Add,

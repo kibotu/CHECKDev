@@ -48,13 +48,4 @@ class RoleViewModel : ViewModel(), KoinComponent {
         }
 
     }
-
-    fun addRole() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.addRole()
-            }
-        }
-    }
-
 }
