@@ -24,10 +24,10 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch { repository.addScenario(scenario) }
     }
 
-    fun runScenario() {
+    fun runScenario(task: String) {
         viewModelScope.launch {
             val scenario = repository.getScenario(1)
-            overseer.run(requireNotNull(scenario))
+            overseer.run(requireNotNull(scenario), task)
         }
     }
 }
