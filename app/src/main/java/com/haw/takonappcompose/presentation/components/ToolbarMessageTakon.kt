@@ -36,6 +36,7 @@ import com.haw.takonappcompose.ui.theme.GreenColor
 fun ToolbarMessageTakon(
     modifier: Modifier = Modifier,
     clear: () -> Unit,
+    loading: Boolean,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -88,6 +89,10 @@ fun ToolbarMessageTakon(
                             fontSize = 12.sp
                         )
                     )
+
+                    if (loading) {
+                        Text("loading...", color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f))
+                    }
                 }
             }
 

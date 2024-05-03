@@ -60,9 +60,9 @@ fun CreateTaskScreen(
 @Composable
 fun SimplePhase(
     availableRoles: List<RoleEntity>,
+    modifier: Modifier = Modifier,
     role1: RoleEntity? = null,
     role2: RoleEntity? = null,
-    modifier: Modifier = Modifier,
 ) {
     var agent1: RoleEntity? by remember {
         mutableStateOf(
@@ -197,8 +197,8 @@ val roles = listOf(
         icon = "lorem",
         bias = "ceteros",
         role = "parturient",
-        id = "",
-        temperature = "",
+        id = "1",
+        temperature = "0.7"
     ),
     RoleEntity(
         model = "repudiandae",
@@ -206,8 +206,8 @@ val roles = listOf(
         icon = "a",
         bias = "ipsum",
         role = "inani",
-        id = "",
-        temperature = "",
+        id = "2",
+        temperature = "0.7"
     ),
 )
 
