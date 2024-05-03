@@ -1,51 +1,38 @@
 package com.haw.takonappcompose.presentation.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.haw.takonappcompose.R
 import com.haw.takonappcompose.database.RoleEntity
-import com.haw.takonappcompose.navigation.Screen
-import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.viewmodel.CreateRoleViewModel
-import com.haw.takonappcompose.viewmodel.RoleViewModel
-import org.koin.androidx.compose.get
 
 @Composable
 fun CreateRoleScreen(
@@ -53,13 +40,14 @@ fun CreateRoleScreen(
     viewModel: CreateRoleViewModel = viewModel()
 ) {
     val (nameInput, setNameInput) = remember { mutableStateOf("") }
-    val (modelInput, setModelInput) = remember { mutableStateOf("") }
     val (ipInput, setIpInput) = remember { mutableStateOf("") }
     val (iconInput, setIconInput) = remember { mutableStateOf("") }
     val (biasInput, setBiasInput) = remember { mutableStateOf("") }
-    val (roleInput, setRoleInput) = remember { mutableStateOf("") }
-    val (temperatureInput, setTemperatureInput) = remember { mutableStateOf("") }
+    var temperatureSliderPosition by remember { mutableFloatStateOf(0f) }
     var isError by remember { mutableStateOf(false) }
+    var selectedModelIndex by remember { mutableIntStateOf(0) }
+    var selectedRoleIndex by remember { mutableIntStateOf(0) }
+
 
     Column(
         modifier = Modifier
@@ -84,21 +72,14 @@ fun CreateRoleScreen(
             }
         )
 
-        TextField(
-            modifier = Modifier
-                .background(color = Color.White)
-                .fillMaxWidth(),
-            value = modelInput,
-            onValueChange = { value ->
-                setModelInput(value)
-            },
-            placeholder = {
-                Text(
-                    text = "Enter model",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        )
+        Text(text = "Model:")
+        Dropdown(
+            viewModel = viewModel,
+            items = viewModel.knownModels.map { it.name },
+            selectedIndex = selectedModelIndex
+        ) {
+            selectedModelIndex = it
+        }
 
         TextField(
             modifier = Modifier
@@ -148,59 +129,43 @@ fun CreateRoleScreen(
             }
         )
 
-        TextField(
-            modifier = Modifier
-                .background(color = Color.White)
-                .fillMaxWidth(),
-            value = roleInput,
-            onValueChange = { value ->
-                setRoleInput(value)
-            },
-            placeholder = {
-                Text(
-                    text = "Enter role",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        )
+        Text(text = "Role:")
+        Dropdown(
+            viewModel = viewModel,
+            items = viewModel.knownRoles.map { it.name },
+            selectedIndex = selectedRoleIndex
+        ) {
+            selectedRoleIndex = it
+        }
 
-        TextField(
-            modifier = Modifier
-                .background(color = Color.White)
-                .fillMaxWidth(),
-            value = temperatureInput,
-            onValueChange = { value ->
-                setTemperatureInput(value)
-            },
-            placeholder = {
-                Text(
-                    text = "Enter temperature",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        )
+        Column {
+            Text(text = "Temperature:")
+            Slider(
+                value = temperatureSliderPosition,
+                onValueChange = { temperatureSliderPosition = it },
+            )
+            Text(text = temperatureSliderPosition.toString())
+        }
+
+
 
         OutlinedButton(
             onClick = {
                 if (nameInput.isNotBlank()
-                    && modelInput.isNotBlank()
                     && ipInput.isNotBlank()
                     && iconInput.isNotBlank()
                     && biasInput.isNotBlank()
-                    && roleInput.isNotBlank()
-                    && temperatureInput.isNotBlank()
-                    )
-                {
+                ) {
                     isError = false
                     viewModel.addRole(
                         RoleEntity(
                             id = nameInput,
-                            model = modelInput,
+                            model = viewModel.knownModels[selectedModelIndex].name,
                             ip = ipInput,
                             icon = iconInput,
                             bias = biasInput,
-                            role = roleInput,
-                            temperature = temperatureInput
+                            role = viewModel.knownRoles[selectedRoleIndex].name,
+                            temperature = temperatureSliderPosition.toString()
                         )
                     )
                     navController.popBackStack()
@@ -227,4 +192,34 @@ fun CreateRoleScreenPreview() {
     CreateRoleScreen(
         navController = rememberNavController()
     )
+}
+
+@Composable
+fun Dropdown(viewModel: CreateRoleViewModel, items: List<String>, selectedIndex: Int, selectedIndexCallback: (Int) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentSize(Alignment.TopStart)) {
+        Text(
+            items[selectedIndex],
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { expanded = true })
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(
+                    text = { Text(text = s) },
+                    onClick = {
+                        selectedIndexCallback.invoke(index)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
 }
