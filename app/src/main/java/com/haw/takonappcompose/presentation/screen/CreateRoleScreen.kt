@@ -1,16 +1,24 @@
 package com.haw.takonappcompose.presentation.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -21,18 +29,27 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.viewmodel.CreateRoleViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreateRoleScreen(
@@ -72,11 +89,10 @@ fun CreateRoleScreen(
             }
         )
 
-        Text(text = "Model:")
         Dropdown(
-            viewModel = viewModel,
             items = viewModel.knownModels.map { it.name },
-            selectedIndex = selectedModelIndex
+            selectedIndex = selectedModelIndex,
+            label = "Model"
         ) {
             selectedModelIndex = it
         }
@@ -129,11 +145,10 @@ fun CreateRoleScreen(
             }
         )
 
-        Text(text = "Role:")
         Dropdown(
-            viewModel = viewModel,
             items = viewModel.knownRoles.map { it.name },
-            selectedIndex = selectedRoleIndex
+            selectedIndex = selectedRoleIndex,
+            label = "Role"
         ) {
             selectedRoleIndex = it
         }
@@ -194,22 +209,59 @@ fun CreateRoleScreenPreview() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun Dropdown(viewModel: CreateRoleViewModel, items: List<String>, selectedIndex: Int, selectedIndexCallback: (Int) -> Unit) {
+fun Dropdown(items: List<String>, label: String, selectedIndex: Int, selectedIndexCallback: (Int) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val coroutineScope = rememberCoroutineScope()
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
     var expanded by remember { mutableStateOf(false) }
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentSize(Alignment.TopStart)) {
-        Text(
-            items[selectedIndex],
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    ExposedDropdownMenuBox(
+        modifier = Modifier.focusRequester(focusRequester),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        TextField(
             modifier = Modifier
+                .menuAnchor()
                 .fillMaxWidth()
-                .clickable(onClick = { expanded = true })
+                .onFocusEvent {
+                    if (it.isFocused) {
+                        coroutineScope.launch {
+                            bringIntoViewRequester.bringIntoView()
+                            keyboardController?.show()
+                        }
+                    }
+                },
+            readOnly = true,
+            value = items[selectedIndex],
+            onValueChange = { },
+            label = { Text(label) },
+            keyboardActions = KeyboardActions(
+                onAny = {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
+            ),
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
-        DropdownMenu(
+        ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth()
+            onDismissRequest = {
+                expanded = false
+            },
+            modifier = Modifier
+                .exposedDropdownSize()
+                .zIndex(2f),
         ) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(

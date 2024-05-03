@@ -10,7 +10,7 @@ data class Question(
     @SerialName("messages")
     val messages: List<Message>,
     @SerialName("stream")
-    val stream : Boolean
+    val stream: Boolean
 )
 
 @Serializable
