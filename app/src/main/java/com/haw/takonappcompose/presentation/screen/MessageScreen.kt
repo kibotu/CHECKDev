@@ -1,5 +1,6 @@
 package com.haw.takonappcompose.presentation.screen
 
+import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +37,13 @@ fun MessageScreen(
 ) {
     val messages by viewModel.messages.collectAsState()
     val loading by viewModel.loading.collectAsState()
+    val scrollState = rememberLazyListState()
+
+    LaunchedEffect(key1 = messages.size) {
+        if (messages.isNotEmpty()) {
+            scrollState.animateScrollToItem(messages.size - 1)
+        }
+    }
 
     val (input, setInput) = remember { mutableStateOf("") }
 
@@ -52,9 +62,10 @@ fun MessageScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 8.dp),
+                        .padding(top = 8.dp, bottom = 64.dp),
                     verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-                    horizontalAlignment = Alignment.End
+                    horizontalAlignment = Alignment.End,
+                    state = scrollState
                 ) {
                     items(messages) { message ->
                         if (message.fromUser) {
