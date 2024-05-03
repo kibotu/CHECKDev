@@ -8,15 +8,13 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.haw.takonappcompose.navigation.Screen
-import com.haw.takonappcompose.ui.theme.TakonAppComposeTheme
 
 @Composable
 fun BottomNavBar(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
 ) {
     BottomAppBar(
         modifier = modifier,
@@ -40,15 +38,14 @@ fun BottomNavBar(
                 modifier = Modifier.weight(1f),
                 imageVector = Icons.Outlined.Build,
             ) {
-                
             },
 
             BottomNavItem(
                 modifier = Modifier.weight(1f),
                 imageVector = Icons.Outlined.Settings,
             ) {
-
-            }
+                navController.navigate(route = Screen.CreateTask.route)
+            },
         )
     }
 }
