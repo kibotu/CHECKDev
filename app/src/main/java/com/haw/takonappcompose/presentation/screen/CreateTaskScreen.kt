@@ -46,6 +46,8 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.haw.takonappcompose.R
 import com.haw.takonappcompose.database.RoleEntity
+import com.haw.takonappcompose.presentation.model.Action
+import com.haw.takonappcompose.presentation.model.PhasePresentationModel
 import com.haw.takonappcompose.viewmodel.CreateTaskViewModel
 import kotlinx.coroutines.launch
 
@@ -54,7 +56,69 @@ fun CreateTaskScreen(
     navController: NavController,
     viewModel: CreateTaskViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
-    SimplePhase(availableRoles = roles)
+    Column {
+        TaskUI()
+        ScenarioUI(
+            availableRoles = roles,
+            phases = phases,
+        )
+    }
+}
+
+@Composable
+private fun TaskUI() {
+    var task by remember {
+        mutableStateOf(
+            "",
+        )
+    }
+    TextField(value = task, onValueChange = { task = it })
+}
+
+@Composable
+private fun ScenarioUI(
+    availableRoles: List<RoleEntity>,
+    phases: List<PhasePresentationModel>,
+) {
+    phases.forEach {
+        Phase(
+            actions = it.actions,
+            availableRoles = availableRoles,
+        )
+    }
+    AddPhase()
+}
+
+@Composable
+private fun AddPhase(
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        modifier = modifier,
+        painter = painterResource(id = R.drawable.add_circle),
+        contentDescription = null,
+    )
+}
+
+@Composable
+private fun Phase(
+    availableRoles: List<RoleEntity>,
+    actions: List<Action>,
+) {
+    Column {
+        actions.forEachIndexed { index, action ->
+            SelectRole(
+                availableRoles = availableRoles,
+                onSelect = { },
+            )
+            if (index != actions.lastIndex) {
+                Arrow(
+                    Modifier.rotate(90F)
+                        .align(Alignment.CenterHorizontally),
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -198,7 +262,7 @@ val roles = listOf(
         bias = "ceteros",
         role = "parturient",
         id = "1",
-        temperature = "0.7"
+        temperature = "0.7",
     ),
     RoleEntity(
         model = "repudiandae",
@@ -207,13 +271,42 @@ val roles = listOf(
         bias = "ipsum",
         role = "inani",
         id = "2",
-        temperature = "0.7"
+        temperature = "0.7",
+    ),
+)
+
+val demoActions = listOf(
+    Action(
+        role = roles.first(),
+    ),
+    Action(
+        role = roles.get(1),
+    ),
+)
+
+val phases = listOf(
+    PhasePresentationModel(
+        actions = demoActions,
     ),
 )
 
 @Preview
 @Composable
 fun JobConfigurationScreenPreview() {
+    Box() {
+        Column {
+            TaskUI()
+            ScenarioUI(
+                availableRoles = roles,
+                phases = phases,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun JobConfigurationScreenPreviewOld() {
     Box() {
         SimplePhase(
             availableRoles = roles,

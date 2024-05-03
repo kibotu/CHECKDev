@@ -15,5 +15,5 @@ interface ActionDao {
     suspend fun delete(action: ActionEntity)
 
     @Query("SELECT * FROM `actions`")
-    suspend fun getAll(): List<ActionEntity>
+    suspend fun getAll(): List<ActionEntity>?
 }

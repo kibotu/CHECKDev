@@ -9,5 +9,5 @@ data class PhaseEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "scenario_id")
-    var scenarioId: Int
+    var scenarioId: Int,
 )

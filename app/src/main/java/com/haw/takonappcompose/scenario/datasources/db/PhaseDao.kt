@@ -15,5 +15,5 @@ interface PhaseDao {
     suspend fun delete(phaseEntity: PhaseEntity)
 
     @Query("SELECT * FROM `phases`")
-    suspend fun getAll(): List<PhaseEntity>
+    suspend fun getAll(): List<PhaseEntity>?
 }
