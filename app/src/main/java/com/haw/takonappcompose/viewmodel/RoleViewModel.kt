@@ -6,6 +6,7 @@ import com.haw.takonappcompose.database.AnswerEntity
 import com.haw.takonappcompose.database.AppDatabase
 import com.haw.takonappcompose.models.Message
 import com.haw.takonappcompose.models.Resource
+import com.haw.takonappcompose.models.Role
 import com.haw.takonappcompose.repositories.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +22,8 @@ class RoleViewModel : ViewModel(), KoinComponent {
     private val database: AppDatabase by inject()
     private val repository: Repository by inject()
 
-    private val _messages: MutableStateFlow<List<Message>> = MutableStateFlow(emptyList())
-    val roles = _messages.asStateFlow()
+    private val _roles: MutableStateFlow<List<Role>> = MutableStateFlow(emptyList())
+    val roles = _roles.asStateFlow()
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
@@ -30,57 +31,21 @@ class RoleViewModel : ViewModel(), KoinComponent {
     init {
 
         viewModelScope.launch {
-            repository.getMessages().collect { data ->
-                _messages.update { data }
-            }
-        }
-
-    }
-
-    fun askQuestion(question: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                database.answerDao().addAnswer(
-                    answerEntity = AnswerEntity(
-                        role = "user",
-                        content = question
+            _roles.update {
+                (1..10).map {
+                    Role(
+                        model = "model #$it",
+                        ip = "",
+                        icon = "",
+                        bias = "bias of model #$it",
+                        role = "role $it"
                     )
-                )
-            }
-            _loading.update { true }
-            repository.chat(
-                prevQuestion = roles.value,
-                question = question
-            ).also { baseModel ->
-                _loading.update { false }
-                when (baseModel) {
-                    is Resource.Success -> {
-                        withContext(Dispatchers.IO) {
-                            database.answerDao().addAnswer(
-                                answerEntity = AnswerEntity(
-                                    role = "assistant",
-                                    content = baseModel.data.message?.content
-                                )
-                            )
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        println("Something wrong : ${baseModel.error}")
-                    }
-
-                    else -> {}
                 }
             }
+//            repository.getRoles().collect { data ->
+//                _roles.update { data }
+//            }
         }
-    }
 
-    fun addRole() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.addRole()
-            }
-        }
     }
-
 }

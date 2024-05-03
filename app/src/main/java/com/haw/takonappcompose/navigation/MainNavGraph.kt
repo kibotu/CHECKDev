@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.haw.takonappcompose.presentation.screen.CreateRoleScreen
 import com.haw.takonappcompose.presentation.screen.MessageScreen
 import com.haw.takonappcompose.presentation.screen.OnBoardingScreen
 import com.haw.takonappcompose.presentation.screen.RoleScreen
@@ -30,6 +31,9 @@ fun MainNavGraph(modifier : Modifier = Modifier, navController: NavHostControlle
         }
         composable(route = Screen.Role.route) {
             RoleScreen(navController = navController)
+        }
+        composable(route = Screen.CreateRole.route) {
+            CreateRoleScreen(navController = navController)
         }
     }
 
