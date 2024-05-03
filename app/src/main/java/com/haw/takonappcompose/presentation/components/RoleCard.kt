@@ -16,14 +16,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +35,7 @@ fun RoleCard(
     role: Role,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier.wrapContentSize()) {
+    Box(modifier = modifier.wrapContentSize()) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -56,7 +54,7 @@ fun RoleCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Color.LightGray)
+                    .background(BluePrimary.copy(alpha = .15f))
                     .wrapContentSize(),
             ) {
                 Column(
@@ -85,7 +83,7 @@ fun RoleCard(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun RoleCardPreview() {
     TakonAppComposeTheme {
