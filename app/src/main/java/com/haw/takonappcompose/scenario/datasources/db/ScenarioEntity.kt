@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("scenario")
+@Entity("scenarios")
 data class ScenarioEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

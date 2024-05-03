@@ -9,11 +9,21 @@ import com.haw.takonappcompose.models.Message
 import com.haw.takonappcompose.models.Question
 import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.network.Api
+import com.haw.takonappcompose.scenario.datasources.db.ActionDao
+import com.haw.takonappcompose.scenario.datasources.db.PhaseDao
+import com.haw.takonappcompose.scenario.datasources.db.ScenarioDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
-class Repository(private val api: Api, private val answerDao: AnswerDao, private val roleDao: RoleDao) {
+class Repository(
+    private val api: Api,
+    private val answerDao: AnswerDao,
+    private val roleDao: RoleDao,
+    private val scenarioDao: ScenarioDao,
+    private val phaseDao: PhaseDao,
+    private val actionDao: ActionDao
+) {
 
     suspend fun chat(
         prevQuestion: List<Message>,
