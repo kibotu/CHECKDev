@@ -2,6 +2,7 @@ package com.haw.takonappcompose.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,17 +44,40 @@ fun MessageScreen(
 
     val (input, setInput) = remember { mutableStateOf("") }
 
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            ToolbarMessageTakon(
-                clear = { viewModel.clear() }
-            )
-        },
-        bottomBar = { BottomNavBar() },
-        floatingActionButton = {
+
+    Column {
+
+        ToolbarMessageTakon(
+            clear = { viewModel.clear() }
+        )
+
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    items(messages) { message ->
+                        if (message.fromUser) {
+                            MessengerItemCard(
+                                modifier = Modifier.align(Alignment.End),
+                                message = message.content
+                            )
+                        } else {
+                            ReceiverMessageItemCard(message = message.content)
+                        }
+                    }
+                }
+            }
+
             WriteMessageCard(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier = Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp, vertical = 16.dp),
                 value = input,
                 onValueChange = { value ->
                     setInput(value)
@@ -65,34 +89,9 @@ fun MessageScreen(
                     }
                 },
             )
-        },
-        floatingActionButtonPosition = FabPosition.Center
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues = paddingValues)
-                .fillMaxSize()
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-                horizontalAlignment = Alignment.End
-            ) {
-                items(messages) { message ->
-                    if (message.fromUser) {
-                        MessengerItemCard(
-                            modifier = Modifier.align(Alignment.End),
-                            message = message.content
-                        )
-                    } else {
-                        ReceiverMessageItemCard(message = message.content)
-                    }
-                }
-            }
         }
     }
+
 }
 
 @Preview
