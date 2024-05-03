@@ -71,7 +71,7 @@ fun ToolbarMessageTakon(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -91,7 +91,16 @@ fun ToolbarMessageTakon(
                     )
 
                     if (loading) {
-                        Text("loading...", color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f))
+
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = "loading...",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .3f),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 12.sp
+                            )
+                        )
                     }
                 }
             }

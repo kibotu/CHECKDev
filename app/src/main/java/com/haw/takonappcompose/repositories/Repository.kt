@@ -91,8 +91,20 @@ class Repository(
         phaseDao.upsert(phase)
     }
 
-    suspend fun addAction(action: ActionEntity) {
+    suspend fun addAction(action: ActionEntity) = withContext(Dispatchers.IO) {
         actionDao.upsert(action)
+    }
+
+    suspend fun getPhasesById(id: Int): List<PhaseEntity> = withContext(Dispatchers.IO) {
+        phaseDao.getAll()?.filter { it.scenarioId == id }.orEmpty()
+    }
+
+    suspend fun getActionsByPhaseId(id: Int): List<ActionEntity> = withContext(Dispatchers.IO) {
+        actionDao.getAll()?.filter { it.phaseId == id }.orEmpty()
+    }
+
+    suspend fun getRoleById(id: String): RoleEntity? = withContext(Dispatchers.IO) {
+        roleDao.getAll()?.firstOrNull { it.id == id }
     }
 
     // endregion

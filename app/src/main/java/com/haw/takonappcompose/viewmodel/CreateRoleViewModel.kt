@@ -13,6 +13,8 @@ import org.koin.core.component.inject
 class CreateRoleViewModel : ViewModel(), KoinComponent {
 
     private val repository: Repository by inject()
+    val knownModels = KnownModels.entries.toTypedArray()
+    val knownRoles = KnownRoles.entries.toTypedArray()
 
     fun addRole(roleEntity: RoleEntity) {
         viewModelScope.launch {
@@ -22,4 +24,18 @@ class CreateRoleViewModel : ViewModel(), KoinComponent {
         }
     }
 
+}
+
+enum class KnownModels {
+    LLAMA,
+    OLLAMA
+}
+
+enum class KnownRoles {
+    CEO,
+    CTO,
+    PM,
+    PROGRAMMER,
+    QA,
+    REVIEWER
 }
