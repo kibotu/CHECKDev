@@ -36,9 +36,9 @@ class TakonApp : Application() {
                 single {
                     OkHttpClient.Builder().apply {
                         // set timeouts
-                        connectTimeout(8, TimeUnit.SECONDS)
-                        readTimeout(8, TimeUnit.SECONDS)
-                        writeTimeout(8, TimeUnit.SECONDS)
+                        connectTimeout(60, TimeUnit.SECONDS)
+                        readTimeout(60, TimeUnit.SECONDS)
+                        writeTimeout(60, TimeUnit.SECONDS)
                         retryOnConnectionFailure(true)
                         addInterceptor(
                             HttpLoggingInterceptor {
