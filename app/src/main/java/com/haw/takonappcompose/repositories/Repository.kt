@@ -16,8 +16,10 @@ import com.haw.takonappcompose.scenario.datasources.db.PhaseEntity
 import com.haw.takonappcompose.scenario.datasources.db.ScenarioDao
 import com.haw.takonappcompose.scenario.datasources.db.ScenarioEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
@@ -29,6 +31,17 @@ class Repository(
     private val phaseDao: PhaseDao,
     private val actionDao: ActionDao
 ) {
+
+    init {
+        MainScope()
+            .launch {
+                getRoles().collect {
+                    if (it.isEmpty()) {
+                        addDummyRoles()
+                    }
+                }
+            }
+    }
 
     suspend fun chat(
         prevQuestion: List<Message>,
@@ -82,11 +95,12 @@ class Repository(
         scenarioDao.upsert(scenario)
     }
 
+    suspend fun getScenario(id: Int): ScenarioEntity? = withContext(Dispatchers.IO) {
+        scenarioDao.getScenarioById(id)
+    }
+
     suspend fun addPhase(phase: PhaseEntity) = withContext(Dispatchers.IO) {
-        val scenario = scenarioDao.getScenarioById(1) ?: ScenarioEntity(
-            id = 1
-        )
-        scenarioDao.upsert(scenario)
+        val scenario = scenarioDao.getScenarioById(1) ?: return@withContext
         phase.scenarioId = scenario.id
         phaseDao.upsert(phase)
     }
@@ -105,6 +119,48 @@ class Repository(
 
     suspend fun getRoleById(id: String): RoleEntity? = withContext(Dispatchers.IO) {
         roleDao.getAll()?.firstOrNull { it.id == id }
+    }
+
+    private suspend fun addDummyRoles() {
+        RoleEntity(
+            id = "CEO",
+            model = "llama3",
+            ip = "bla",
+            bias = "world conqueror",
+            icon = "bla",
+            role = "CEO",
+            temperature = "0.7"
+        ).let { addRole(it) }
+
+        RoleEntity(
+            id = "PM",
+            model = "llama3",
+            ip = "bla",
+            bias = "world conquerors helper",
+            icon = "bla",
+            role = "PM",
+            temperature = "0.2"
+        ).let { addRole(it) }
+
+        RoleEntity(
+            id = "Programmer",
+            model = "llama3",
+            ip = "bla",
+            bias = "nerdy worker",
+            icon = "bla",
+            role = "PROGRAMMER",
+            temperature = "0.9"
+        ).let { addRole(it) }
+
+        RoleEntity(
+            id = "QA",
+            model = "llama3",
+            ip = "bla",
+            bias = "picky tester",
+            icon = "bla",
+            role = "QA",
+            temperature = "0.9"
+        ).let { addRole(it) }
     }
 
     // endregion
