@@ -23,12 +23,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Column() {
+                    val navController = rememberNavController()
+
+                    Column {
                         MainNavGraph(
                             modifier = Modifier.weight(1f),
-                            navController = rememberNavController()
+                            navController = navController
                         )
-                        BottomNavBar()
+                        BottomNavBar(navController = navController)
                     }
                 }
             }

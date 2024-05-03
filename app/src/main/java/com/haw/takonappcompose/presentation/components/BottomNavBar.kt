@@ -52,12 +52,3 @@ fun BottomNavBar(
         )
     }
 }
-
-@Preview
-@Composable
-fun BottomNavBarPreview() {
-    TakonAppComposeTheme {
-        BottomNavBar()
-    }
-}
-
