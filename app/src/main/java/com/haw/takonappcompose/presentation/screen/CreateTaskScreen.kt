@@ -1,12 +1,14 @@
 package com.haw.takonappcompose.presentation.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -15,12 +17,15 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,6 +43,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -53,6 +59,7 @@ import com.haw.takonappcompose.R
 import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.presentation.model.Action
 import com.haw.takonappcompose.presentation.model.PhasePresentationModel
+import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.viewmodel.CreateTaskViewModel
 import kotlinx.coroutines.launch
 
@@ -64,7 +71,9 @@ fun CreateTaskScreen(
     Column(
         verticalArrangement = Arrangement.spacedBy(50.dp),
     ) {
-        TaskUI()
+        TaskUI {
+            viewModel.runScenario(it)
+        }
         ScenarioUI(
             availableRoles = roles,
             phases = phases,
@@ -75,13 +84,23 @@ fun CreateTaskScreen(
 }
 
 @Composable
-private fun TaskUI() {
-    var task by remember {
-        mutableStateOf(
-            "",
-        )
+private fun TaskUI(onClick: (String) -> Unit) {
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+        var task by remember {
+            mutableStateOf(
+                "",
+            )
+        }
+        TextField(value = task, onValueChange = { task = it })
+        IconButton(onClick = { onClick(task) }) {
+            Image(
+                modifier = Modifier.size(32.dp),
+                imageVector = Icons.Outlined.PlayArrow,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(BluePrimary)
+            )
+        }
     }
-    TextField(value = task, onValueChange = { task = it })
 }
 
 @Composable
@@ -122,7 +141,9 @@ private fun AddPhase(
     addPhase: () -> Unit,
 ) {
     Icon(
-        modifier = modifier.clickable { addPhase() }.size(40.dp),
+        modifier = modifier
+            .clickable { addPhase() }
+            .size(40.dp),
         painter = painterResource(id = R.drawable.add_circle),
         contentDescription = null,
         tint = Color.Green,
@@ -137,7 +158,8 @@ private fun Phase(
     onUpdatePhase: (RoleEntity, Int) -> Unit,
 ) {
     Column(
-        modifier = modifier.border(width = 1.dp, color = Color.Black)
+        modifier = modifier
+            .border(width = 1.dp, color = Color.Black)
             .padding(5.dp),
     ) {
         actions.forEachIndexed { index, action ->
@@ -173,13 +195,18 @@ fun SimplePhase(
     }
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier.fillMaxWidth().heightIn(min = 30.dp, max = 200.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 30.dp, max = 200.dp),
     ) {
         SelectRole(
             availableRoles = availableRoles,
             onSelect = { agent1 = it },
         )
-        Arrow(Modifier.rotate(90F).align(Alignment.CenterHorizontally))
+        Arrow(
+            Modifier
+                .rotate(90F)
+                .align(Alignment.CenterHorizontally))
         SelectRole(
             availableRoles = availableRoles,
             onSelect = { agent2 = it },
@@ -192,7 +219,9 @@ private fun Arrow(
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        modifier = modifier.widthIn(min = 20.dp).rotate(90f),
+        modifier = modifier
+            .widthIn(min = 20.dp)
+            .rotate(90f),
         painter = painterResource(id = R.drawable.arrow_right),
         contentDescription = null,
     )
@@ -338,12 +367,12 @@ val phases = listOf(
     ),
 )
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun JobConfigurationScreenPreview() {
     Box {
         Column {
-            TaskUI()
+            TaskUI({})
             ScenarioUI(
                 availableRoles = roles,
                 phases = phases,
