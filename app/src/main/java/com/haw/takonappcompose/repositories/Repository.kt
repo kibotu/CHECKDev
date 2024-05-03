@@ -64,6 +64,19 @@ class Repository(
             return Resource.Error(e.message.toString())
         }
     }
+    suspend fun chat(
+        question: Question
+    ): Resource<ChatAnswer> {
+        try {
+            api.chat(
+                question = question
+            ).also { response ->
+                return Resource.Success(data = response)
+            }
+        } catch (e: Exception) {
+            return Resource.Error(e.message.toString())
+        }
+    }
 
     suspend fun getMessages(): Flow<List<Message>> {
         return answerDao.getAnswer().map { value ->

@@ -1,5 +1,9 @@
 package com.haw.takonappcompose.overseer
 
+import com.haw.takonappcompose.models.ChatAnswer
+import com.haw.takonappcompose.models.Message
+import com.haw.takonappcompose.models.Question
+import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.repositories.Repository
 import com.haw.takonappcompose.scenario.datasources.db.ActionEntity
 import com.haw.takonappcompose.scenario.datasources.db.PhaseEntity
@@ -11,26 +15,51 @@ class Overseer(private val repository: Repository) {
     suspend fun run(scenario: ScenarioEntity, task: String) {
         val phases = repository.getPhasesById(scenario.id)
 
-        for (phase in phases) {
-            phase.run(task)
+        var previousPhase = phases.first()
+        var result = previousPhase.run(task)
+
+        phases.drop(1).forEachIndexed { index, phaseEntity ->
+            result = phaseEntity.run(result.message?.content ?: "no message")
         }
     }
 
-    private suspend fun PhaseEntity.run(task: String) {
+    private suspend fun PhaseEntity.run(task: String): ChatAnswer {
         val actions = repository.getActionsByPhaseId(id)
-        for (action in actions) {
-            action.run(task)
-        }
+
+        var action = actions.first()
+        var result = action.run(task)
+
+        actions
+            .drop(1)
+            .forEachIndexed { index, actionEntity ->
+                result = actionEntity.run(result.message?.content ?: "no message")
+            }
+
+        return result
     }
 
-    private suspend fun ActionEntity.run(task: String) {
-        val role = repository.getRoleById(roleId)
+    private suspend fun ActionEntity.run(input: String): ChatAnswer {
+        val role = requireNotNull(repository.getRoleById(roleId))
 
-        if (role == null) {
-            Timber.w("no role for $this")
-            return
+        val result: ChatAnswer? = null
+        try {
+            val response: Resource.Success<ChatAnswer> = repository.chat(
+                Question(
+                    model = role.model,
+                    messages = listOf(
+                        Message(
+                            role = role.role,
+                            content = input
+                        )
+                    ),
+                    stream = false
+                )
+            ) as Resource.Success
+            return response.data
+        } catch (e: Exception) {
+            Timber.e(e)
         }
 
-
+        return requireNotNull(result)
     }
 }
