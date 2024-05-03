@@ -17,9 +17,6 @@ import com.haw.takonappcompose.ui.theme.TakonAppComposeTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var isClickLong = false
-    var age: Int = 10
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,5 +30,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }

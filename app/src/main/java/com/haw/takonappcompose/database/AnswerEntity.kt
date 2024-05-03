@@ -9,7 +9,7 @@ data class AnswerEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo("role")
-    val role: String,
+    val role: String?,
     @ColumnInfo("content")
-    val content: String
+    val content: String?
 )

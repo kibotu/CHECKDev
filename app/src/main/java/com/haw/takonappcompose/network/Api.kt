@@ -1,20 +1,30 @@
 package com.haw.takonappcompose.network
 
-import com.haw.takonappcompose.models.Answer
+import com.haw.takonappcompose.models.ChatAnswer
+import com.haw.takonappcompose.models.PromptAnswer
 import com.haw.takonappcompose.models.Question
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-
-const val APIKEY = "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"
+import retrofit2.http.Streaming
 
 interface Api {
 
-    @POST("completions")
-    @Headers("Authorization: Bearer $APIKEY", "Content-Type: application/json")
-    suspend fun askQuestion(
+    @POST("api/generate")
+    @Headers("Content-Type: application/json")
+    suspend fun prompt(
         @Body question: Question
-    ): Response<Answer>
+    ): PromptAnswer
 
+    @POST("api/chat")
+    @Headers("Content-Type: application/json")
+    suspend fun chat(
+        @Body question: Question
+    ): ChatAnswer
+
+
+    @Streaming
+    @POST("api/chat")
+    @Headers("Content-Type: application/json")
+    suspend fun chatStreamed(@Body question: Question)
 }

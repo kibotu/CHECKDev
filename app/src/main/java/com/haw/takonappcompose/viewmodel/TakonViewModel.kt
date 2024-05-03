@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.haw.takonappcompose.database.AnswerEntity
 import com.haw.takonappcompose.database.AppDatabase
-import com.haw.takonappcompose.models.BaseModel
 import com.haw.takonappcompose.models.Message
+import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.repositories.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,23 +48,24 @@ class TakonViewModel : ViewModel(), KoinComponent {
                 )
             }
             _loading.update { true }
-            repository.askQuestion(
+            repository.chat(
                 prevQuestion = messages.value,
                 question = question
             ).also { baseModel ->
                 _loading.update { false }
                 when (baseModel) {
-                    is BaseModel.Success -> {
+                    is Resource.Success -> {
                         withContext(Dispatchers.IO) {
-                            database.answerDao().addAnswer(answerEntity = AnswerEntity(
-                                role = "assistant",
-                                content = baseModel.data.choices.first().message.content
-                            )
+                            database.answerDao().addAnswer(
+                                answerEntity = AnswerEntity(
+                                    role = "assistant",
+                                    content = baseModel.data.message?.content
+                                )
                             )
                         }
                     }
 
-                    is  BaseModel.Error -> {
+                    is Resource.Error -> {
                         println("Something wrong : ${baseModel.error}")
                     }
 

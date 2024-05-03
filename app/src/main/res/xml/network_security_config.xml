@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--  we can enable clear text traffic in debug mode  -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Trust user added CAs while debuggable only: for proxies, e.g. charles https://www.charlesproxy.com/documentation/using-charles/ssl-certificates/ -->
+            <certificates src="user" />
+            <certificates src="system" />
+            <!-- add custom certificate source for certificate pinning -->
+            <!-- <certificates src="@raw/my_certificate" /> -->
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
