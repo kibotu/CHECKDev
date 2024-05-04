@@ -76,7 +76,7 @@ fun CreateTaskScreen(
             viewModel.runScenario(it)
         }
         ScenarioUI(
-            availableRoles = roles,
+            availableRoles = viewModel.availableRoles.collectAsState(initial = emptyList()).value,
             phases = viewModel.currentPhases.collectAsState(initial = emptyList()).value,
             addPhase = viewModel::appendPhase,
             onUpdatePhase = viewModel::updatePhase,

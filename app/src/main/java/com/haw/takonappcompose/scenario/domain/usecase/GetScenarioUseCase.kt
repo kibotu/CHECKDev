@@ -28,7 +28,7 @@ class GetScenarioUseCase(
             return@withContext phasesParsed
         }
 
-    private suspend fun List<ActionEntity>.toAction(): List<Action> = mapNotNull { actionEntitiy ->
-        repository.getRoleById(actionEntitiy.roleId)?.let { it -> Action(role = it) }
+    private suspend fun List<ActionEntity>.toAction(): List<Action> = mapNotNull { actionEntity ->
+        Action(role = repository.getRoleById(actionEntity.roleId))
     }
 }

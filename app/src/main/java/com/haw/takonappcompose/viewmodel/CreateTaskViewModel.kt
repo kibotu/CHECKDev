@@ -12,6 +12,7 @@ import com.haw.takonappcompose.scenario.datasources.db.ScenarioEntity
 import com.haw.takonappcompose.scenario.domain.usecase.GetScenarioUseCase
 import com.haw.takonappcompose.uuid.UIDGenerator
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -27,6 +28,8 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
 
     private val currentScenarioId = 1
 
+    val availableRoles = MutableStateFlow<List<RoleEntity>>(emptyList())
+
     val currentPhases = MutableStateFlow<List<PhasePresentationModel>>(emptyList())
 
     init {
@@ -34,6 +37,13 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             currentPhases.update {
                 useCase(currentScenarioId)
+            }
+        }
+        viewModelScope.launch {
+            repository.getRoles().collect { entity ->
+                availableRoles.update {
+                    entity
+                }
             }
         }
     }

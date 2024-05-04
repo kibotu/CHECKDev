@@ -64,11 +64,11 @@ class Repository(
         }
     }
     suspend fun chat(
-        question: Question
+        question: Question,
     ): Resource<ChatAnswer> {
         try {
             api.chat(
-                question = question
+                question = question,
             ).also { response ->
                 return Resource.Success(data = response)
             }
@@ -115,7 +115,7 @@ class Repository(
     }
 
     suspend fun addPhase(phase: PhaseEntity) = withContext(Dispatchers.IO) {
-        val scenario = scenarioDao.getScenarioById(1) ?: return@withContext
+        val scenario = scenarioDao.getScenarioById(phase.scenarioId) ?: return@withContext
         phase.scenarioId = scenario.id
         phaseDao.upsert(phase)
     }
