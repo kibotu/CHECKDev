@@ -53,7 +53,7 @@ class Overseer(private val repository: Repository) {
                     model = role.model,
                     messages = listOf(
                         Message(
-                            role = role.role,
+                            role = "user",
                             content = input
                         )
                     ),
