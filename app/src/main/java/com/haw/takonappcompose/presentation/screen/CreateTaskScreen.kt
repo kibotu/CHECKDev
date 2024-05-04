@@ -98,7 +98,7 @@ private fun TaskUI(onClick: (String) -> Unit) {
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.Outlined.PlayArrow,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(BluePrimary)
+                colorFilter = ColorFilter.tint(BluePrimary),
             )
         }
     }
@@ -107,11 +107,13 @@ private fun TaskUI(onClick: (String) -> Unit) {
 @Composable
 private fun ScenarioUI(
     availableRoles: List<RoleEntity>,
+    modifier: Modifier = Modifier,
     phases: List<PhasePresentationModel>,
     addPhase: () -> Unit,
     onUpdatePhase: (RoleEntity, Int) -> Unit,
 ) {
     Column(
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         phases.forEachIndexed { index, phase ->
@@ -207,7 +209,8 @@ fun SimplePhase(
         Arrow(
             Modifier
                 .rotate(90F)
-                .align(Alignment.CenterHorizontally))
+                .align(Alignment.CenterHorizontally),
+        )
         SelectRole(
             availableRoles = availableRoles,
             onSelect = { agent2 = it },
@@ -259,7 +262,7 @@ private fun SelectRole(
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     ExposedDropdownMenuBox(
-        modifier = modifier.focusRequester(focusRequester),
+        modifier = modifier.focusRequester(focusRequester).widthIn(min = 100.dp),
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded },
     ) {

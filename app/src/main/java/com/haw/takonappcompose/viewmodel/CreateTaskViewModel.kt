@@ -6,6 +6,7 @@ import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.overseer.Overseer
 import com.haw.takonappcompose.presentation.model.PhasePresentationModel
 import com.haw.takonappcompose.repositories.Repository
+import com.haw.takonappcompose.scenario.datasources.db.ActionEntity
 import com.haw.takonappcompose.scenario.datasources.db.PhaseEntity
 import com.haw.takonappcompose.scenario.datasources.db.ScenarioEntity
 import com.haw.takonappcompose.scenario.domain.usecase.GetScenarioUseCase
@@ -25,6 +26,8 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
 
     private val currentScenarioId = 1
 
+    val currentPhases = MutableStateFlow<List<PhasePresentationModel>>(emptyList())
+
     init {
         createScenario()
         viewModelScope.launch {
@@ -33,8 +36,6 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
-    val currentPhases = MutableStateFlow<List<PhasePresentationModel>>(emptyList())
 
     fun createScenario() {
         val scenario = ScenarioEntity(id = currentScenarioId)
@@ -50,12 +51,27 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
 
     fun appendPhase() {
         viewModelScope.launch {
-            repository.addPhase(PhaseEntity(scenarioId = currentScenarioId))
+            val newPhase = PhaseEntity(scenarioId = currentScenarioId)
+            repository.addPhase(newPhase)
+            repository.addAction(
+                ActionEntity(
+                    roleId = "",
+                    input = null,
+                    output = null,
+                    phaseId = newPhase.id,
+                ),
+            )
+            currentPhases.update {
+                useCase(currentScenarioId)
+            }
         }
     }
 
     fun updatePhase(roleEntity: RoleEntity, phaseId: Int) {
         viewModelScope.launch {
+            currentPhases.update {
+                useCase(currentScenarioId)
+            }
 //            repository.addPhase()
         }
     }
