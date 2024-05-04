@@ -60,6 +60,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.haw.takonappcompose.R
 import com.haw.takonappcompose.database.RoleEntity
+import com.haw.takonappcompose.navigation.Screen
 import com.haw.takonappcompose.presentation.model.Action
 import com.haw.takonappcompose.presentation.model.PhasePresentationModel
 import com.haw.takonappcompose.ui.theme.BluePrimary
@@ -76,6 +77,7 @@ fun CreateTaskScreen(
     ) {
         TaskUI {
             viewModel.runScenario(it)
+            navController.navigate(route = Screen.Message.route)
         }
         ScenarioUI(
             availableRoles = viewModel.availableRoles.collectAsState(initial = emptyList()).value,
@@ -89,6 +91,8 @@ fun CreateTaskScreen(
 
 @Composable
 private fun TaskUI(onClick: (String) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
         var task by remember {
             mutableStateOf(
@@ -96,7 +100,12 @@ private fun TaskUI(onClick: (String) -> Unit) {
             )
         }
         TextField(value = task, onValueChange = { task = it })
-        IconButton(onClick = { onClick(task) }) {
+        IconButton(
+            onClick = {
+                keyboardController?.hide()
+                onClick(task)
+            }
+        ) {
             Image(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.Outlined.PlayArrow,

@@ -45,8 +45,6 @@ fun MessageScreen(
         }
     }
 
-    val (input, setInput) = remember { mutableStateOf("") }
-
     Column {
 
         ToolbarMessageTakon(
@@ -62,7 +60,7 @@ fun MessageScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 8.dp, bottom = 64.dp),
+                        .padding(top = 8.dp, bottom = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(space = 8.dp),
                     horizontalAlignment = Alignment.End,
                     state = scrollState
@@ -83,21 +81,6 @@ fun MessageScreen(
                 }
             }
 
-            WriteMessageCard(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                value = input,
-                onValueChange = { value ->
-                    setInput(value)
-                },
-                onClickSend = {
-                    if (input.isNotEmpty()) {
-                        viewModel.askQuestion(question = input)
-                        setInput("")
-                    }
-                },
-            )
         }
     }
 
