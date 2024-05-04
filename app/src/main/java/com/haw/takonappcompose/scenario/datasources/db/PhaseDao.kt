@@ -8,6 +8,9 @@ import androidx.room.Upsert
 @Dao
 interface PhaseDao {
 
+    @Query("SELECT * FROM `phases` WHERE id = :phaseId")
+    suspend fun getById(phaseId: Int): List<PhaseEntity>?
+
     @Upsert
     suspend fun upsert(phaseEntity: PhaseEntity)
 

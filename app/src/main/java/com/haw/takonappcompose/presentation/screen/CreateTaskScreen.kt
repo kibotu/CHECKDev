@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.DropdownMenu
@@ -80,6 +82,7 @@ fun CreateTaskScreen(
             phases = viewModel.currentPhases.collectAsState(initial = emptyList()).value,
             addPhase = viewModel::appendPhase,
             onUpdatePhase = viewModel::updatePhase,
+            onDeleteAction = viewModel::deleteAction,
         )
     }
 }
@@ -110,10 +113,11 @@ private fun ScenarioUI(
     modifier: Modifier = Modifier,
     phases: List<PhasePresentationModel>,
     addPhase: () -> Unit,
-    onUpdatePhase: (RoleEntity, Int, Int) -> Unit,
+    onUpdatePhase: (RoleEntity?, Int, Int) -> Unit,
+    onDeleteAction: (Int, Int) -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         phases.forEachIndexed { index, phase ->
@@ -124,6 +128,7 @@ private fun ScenarioUI(
                     if (index % 2 == 0) Color.LightGray else Color.White,
                 ),
                 onUpdatePhase = { x, y -> onUpdatePhase(x, y, phase.phaseId) },
+                onDeleteAction = { onDeleteAction(it, phase.phaseId) },
             )
             if (index != phases.lastIndex) {
                 LongArrow(
@@ -154,16 +159,47 @@ private fun AddPhase(
 }
 
 @Composable
+private fun AddActionToPhase(
+    modifier: Modifier = Modifier,
+    addActionToPhase: () -> Unit,
+) {
+    Icon(
+        modifier = modifier
+            .clickable { addActionToPhase() }
+            .size(40.dp),
+        painter = painterResource(id = R.drawable.add_circle),
+        contentDescription = null,
+        tint = Color.Green,
+    )
+}
+
+@Composable
+private fun DeleteActionFromPhase(
+    modifier: Modifier = Modifier,
+    onDelete: () -> Unit,
+) {
+    Icon(
+        modifier = modifier
+            .clickable { onDelete() }
+            .size(40.dp),
+        painter = painterResource(id = R.drawable.ic_delete),
+        contentDescription = null,
+        tint = Color.Red,
+    )
+}
+
+@Composable
 private fun Phase(
     availableRoles: List<RoleEntity>,
     actions: List<Action>,
     modifier: Modifier = Modifier,
-    onUpdatePhase: (RoleEntity, Int) -> Unit,
+    onUpdatePhase: (RoleEntity?, Int) -> Unit,
+    onDeleteAction: (Int) -> Unit,
 ) {
     Column(
         modifier = modifier
             .border(width = 1.dp, color = Color.Black)
-            .padding(5.dp),
+            .padding(15.dp),
     ) {
         actions.forEachIndexed { index, action ->
             SelectRole(
@@ -175,6 +211,18 @@ private fun Phase(
                 Arrow(
                     Modifier.align(Alignment.CenterHorizontally),
                 )
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    AddActionToPhase(
+                        addActionToPhase = { onUpdatePhase(null, actions.size) },
+                    )
+                    DeleteActionFromPhase(
+                        onDelete = { onDeleteAction(index) },
+                    )
+                }
             }
         }
     }
@@ -386,6 +434,7 @@ fun JobConfigurationScreenPreview() {
                 phases = phases,
                 addPhase = {},
                 onUpdatePhase = { _, _, _ -> },
+                onDeleteAction = { _, _ -> },
             )
         }
     }
