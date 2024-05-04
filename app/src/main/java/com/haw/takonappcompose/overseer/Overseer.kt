@@ -55,7 +55,7 @@ class Overseer(private val repository: Repository) {
                     messages = listOf(
                         Message(
                             role = "user",
-                            content = input,
+                            content = "Scenario:${role.bias}\n$input"
                         ),
                     ),
                     stream = false,
