@@ -40,7 +40,7 @@ fun RoleCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 modifier = Modifier
@@ -48,7 +48,7 @@ fun RoleCard(
                     .size(64.dp),
                 imageVector = Icons.Outlined.Person,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(BluePrimary)
+                colorFilter = ColorFilter.tint(BluePrimary),
             )
 
             Box(
@@ -61,18 +61,18 @@ fun RoleCard(
                     modifier = Modifier
                         .padding(8.dp)
                         .widthIn(min = 128.dp)
-                        .wrapContentHeight()
+                        .wrapContentHeight(),
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(roleEntity.role, fontSize = 22.sp)
+                        Text(roleEntity.id, fontSize = 22.sp)
 
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Text(
                             text = "(${roleEntity.model})",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .5f),
                         )
                     }
 
@@ -94,9 +94,9 @@ fun RoleCardPreview() {
                 ip = "bla",
                 bias = "world conqueror",
                 icon = "bla",
-                role = "CEO",
-                temperature = "0.7"
-            )
+                role = "assistant",
+                temperature = "0.7",
+            ),
         )
     }
 }

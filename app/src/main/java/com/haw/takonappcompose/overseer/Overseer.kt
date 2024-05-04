@@ -52,12 +52,20 @@ class Overseer(private val repository: Repository) {
             val response = repository.chat(
                 Question(
                     model = role.model,
-                    messages = listOf(
-                        Message(
-                            role = "user",
-                            content = "Scenario:${role.bias}\n$input"
-                        ),
-                    ),
+                    messages = buildList {
+                        add(
+                            Message(
+                                role = "assistant",
+                                content = input,
+                            )
+                        )
+                        add(
+                            Message(
+                                role = "user",
+                                content = role.bias,
+                            )
+                        )
+                    },
                     stream = false,
                     options = Options(
                         temperature = role.temperature.toFloatOrNull() ?: 1f,
@@ -70,8 +78,8 @@ class Overseer(private val repository: Repository) {
                 repository.addAnswer(
                     answerEntity = AnswerEntity(
                         role = "assistant",
-                        content = response.data.message?.content,
-                    ),
+                        content = response.data.message?.content
+                    )
                 )
 
                 return response.data
@@ -79,6 +87,7 @@ class Overseer(private val repository: Repository) {
         } catch (e: Exception) {
             Timber.e(e)
         }
+
 
         return requireNotNull(result)
     }

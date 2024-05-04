@@ -1,10 +1,8 @@
 package com.haw.takonappcompose.presentation.screen
 
-import android.inputmethodservice.Keyboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.haw.takonappcompose.presentation.components.RoleCard
 import com.haw.takonappcompose.navigation.Screen
+import com.haw.takonappcompose.presentation.components.RoleCard
 import com.haw.takonappcompose.ui.theme.BluePrimary
 import com.haw.takonappcompose.viewmodel.RoleViewModel
 
@@ -41,7 +38,7 @@ import com.haw.takonappcompose.viewmodel.RoleViewModel
 @Composable
 fun RoleScreen(
     navController: NavController,
-    viewModel: RoleViewModel = viewModel()
+    viewModel: RoleViewModel = viewModel(),
 ) {
     val roles by viewModel.roles.collectAsState()
 
@@ -53,21 +50,21 @@ fun RoleScreen(
                     modifier = Modifier.size(32.dp),
                     imageVector = Icons.Outlined.Add,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(BluePrimary)
+                    colorFilter = ColorFilter.tint(BluePrimary),
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.End
+        floatingActionButtonPosition = FabPosition.End,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues = paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Text(
                 text = "Roles",
                 fontSize = 32.sp,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
             )
 
             HorizontalDivider()
@@ -77,7 +74,7 @@ fun RoleScreen(
                     .fillMaxSize()
                     .padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.End,
             ) {
                 items(roles) { role ->
                     RoleCard(roleEntity = role)
@@ -91,6 +88,6 @@ fun RoleScreen(
 @Composable
 fun RoleScreenPreview() {
     RoleScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
     )
 }
