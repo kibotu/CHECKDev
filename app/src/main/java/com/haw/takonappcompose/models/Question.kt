@@ -10,7 +10,15 @@ data class Question(
     @SerialName("messages")
     val messages: List<Message>,
     @SerialName("stream")
-    val stream: Boolean
+    val stream: Boolean,
+    @SerialName("options")
+    val options: Options?,
+)
+
+@Serializable
+data class Options(
+    @SerialName("temperature")
+    val temperature: Float,
 )
 
 @Serializable
@@ -18,7 +26,7 @@ data class Message(
     @SerialName("role")
     val role: String,
     @SerialName("content")
-    val content: String
+    val content: String,
 )
 
 val Message.fromUser: Boolean

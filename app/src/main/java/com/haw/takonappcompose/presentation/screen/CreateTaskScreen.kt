@@ -104,7 +104,7 @@ private fun TaskUI(onClick: (String) -> Unit) {
             onClick = {
                 keyboardController?.hide()
                 onClick(task)
-            }
+            },
         ) {
             Image(
                 modifier = Modifier.size(32.dp),
@@ -222,7 +222,7 @@ private fun Phase(
                 )
             } else {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     AddActionToPhase(
@@ -315,7 +315,7 @@ private fun SelectRole(
     }
     var selectedRole: String by remember {
         mutableStateOf(
-            preSelected?.role ?: "",
+            preSelected?.id ?: "",
         )
     }
     val focusManager = LocalFocusManager.current

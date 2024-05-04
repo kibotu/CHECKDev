@@ -6,6 +6,7 @@ import com.haw.takonappcompose.database.RoleDao
 import com.haw.takonappcompose.database.RoleEntity
 import com.haw.takonappcompose.models.ChatAnswer
 import com.haw.takonappcompose.models.Message
+import com.haw.takonappcompose.models.Options
 import com.haw.takonappcompose.models.Question
 import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.network.Api
@@ -56,6 +57,7 @@ class Repository(
                     ),
                     model = "llama3",
                     stream = false,
+                    options = null,
                 ),
             ).also { response ->
                 return Resource.Success(data = response)
