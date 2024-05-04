@@ -120,8 +120,20 @@ class Repository(
         phaseDao.upsert(phase)
     }
 
+    suspend fun getPhaseById(phaseId: Int) = withContext(Dispatchers.IO) {
+        phaseDao.getById(phaseId = phaseId)?.firstOrNull()
+    }
+
     suspend fun addAction(action: ActionEntity) = withContext(Dispatchers.IO) {
         actionDao.upsert(action)
+    }
+
+    suspend fun deleteAction(action: ActionEntity) = withContext(Dispatchers.IO) {
+        actionDao.delete(action)
+    }
+
+    suspend fun deletePhase(phase: PhaseEntity) = withContext(Dispatchers.IO) {
+        phaseDao.delete(phase)
     }
 
     suspend fun getPhasesById(id: Int): List<PhaseEntity> = withContext(Dispatchers.IO) {

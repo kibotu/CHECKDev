@@ -82,7 +82,26 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun updatePhase(roleEntity: RoleEntity, actionIndexInPhase: Int, phaseId: Int) {
+    fun deleteAction(
+        actionIndexInPhase: Int,
+        phaseId: Int,
+    ) {
+        viewModelScope.launch {
+            val actionToDelete = repository.getActionsByPhaseId(phaseId).getOrNull(actionIndexInPhase) ?: return@launch
+            repository.deleteAction(actionToDelete)
+            if (actionIndexInPhase == 0) {
+                repository.getPhaseById(phaseId)?.let {
+                    repository.deletePhase(it)
+                }
+            }
+            // phase: gibt es noch actions?
+            currentPhases.update {
+                useCase(currentScenarioId)
+            }
+        }
+    }
+
+    fun updatePhase(roleEntity: RoleEntity?, actionIndexInPhase: Int, phaseId: Int) {
         viewModelScope.launch {
             val updatedPhase = repository.getPhasesById(currentScenarioId).find { it.id == phaseId } ?: PhaseEntity(
                 id = UIDGenerator.newUID(),
@@ -90,11 +109,11 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
             )
             repository.addPhase(updatedPhase)
             val changedOrCreatedAction = repository.getActionsByPhaseId(updatedPhase.id).getOrNull(actionIndexInPhase)?.apply {
-                roleId = roleEntity.id
+                roleId = roleEntity?.id ?: ""
             } ?: ActionEntity(
                 id = UIDGenerator.newUID(),
                 phaseId = updatedPhase.id,
-                roleId = roleEntity.id,
+                roleId = roleEntity?.id ?: "",
                 input = null,
                 output = null,
             )
