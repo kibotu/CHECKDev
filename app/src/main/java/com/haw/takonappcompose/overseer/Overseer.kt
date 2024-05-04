@@ -3,6 +3,7 @@ package com.haw.takonappcompose.overseer
 import com.haw.takonappcompose.database.AnswerEntity
 import com.haw.takonappcompose.models.ChatAnswer
 import com.haw.takonappcompose.models.Message
+import com.haw.takonappcompose.models.Options
 import com.haw.takonappcompose.models.Question
 import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.repositories.Repository
@@ -51,12 +52,20 @@ class Overseer(private val repository: Repository) {
             val response = repository.chat(
                 Question(
                     model = role.model,
-                    messages = listOf(
-                        Message(
-                            role = "user",
-                            content = "Scenario:${role.bias}\n$input"
-                        ),
-                    ),
+                    messages = buildList {
+                        add(
+                            Message(
+                                role = "assitant",
+                                content = input,
+                            )
+                        )
+                        add(
+                            Message(
+                                role = "user",
+                                content = role.bias,
+                            )
+                        )
+                    },
                     stream = false,
                     options = Options(
                         temperature = role.temperature.toFloatOrNull() ?: 1f,
