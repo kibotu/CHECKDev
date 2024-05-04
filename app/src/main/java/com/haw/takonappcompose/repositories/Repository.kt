@@ -32,6 +32,7 @@ class Repository(
 ) {
 
     init {
+
         MainScope()
             .launch {
                 getRoles().collect {
@@ -153,7 +154,7 @@ class Repository(
             id = "CEO",
             model = "llama3",
             ip = "bla",
-            bias = "world conqueror",
+            bias = "You are a CEO. You don't solve problems yourself but delegate them.",
             icon = "bla",
             role = "assistant",
             temperature = "0.7",
@@ -163,7 +164,7 @@ class Repository(
             id = "PM",
             model = "llama3",
             ip = "bla",
-            bias = "world conquerors helper",
+            bias = "You are a project manager. You plan how problems should be solved and enrich the given task with useful information how a problem could be solved.",
             icon = "bla",
             role = "assistant",
             temperature = "0.2",
@@ -173,7 +174,17 @@ class Repository(
             id = "Programmer",
             model = "llama3",
             ip = "bla",
-            bias = "nerdy worker",
+            bias = "You are a programmer. You act very logically and actually solve given problems and create code if possible and necessary.",
+            icon = "bla",
+            role = "assistant",
+            temperature = "0.9",
+        ).let { addRole(it) }
+
+        RoleEntity(
+            id = "Code Review",
+            model = "llama3",
+            ip = "bla",
+            bias = "You are a programmer and you are reviewing code. You point out how code can be optimized..",
             icon = "bla",
             role = "assistant",
             temperature = "0.9",
@@ -183,7 +194,7 @@ class Repository(
             id = "QA",
             model = "llama3",
             ip = "bla",
-            bias = "picky tester",
+            bias = "You are tester and want to assure the quality of code. You check if the task was solved correctly.",
             icon = "bla",
             role = "assistant",
             temperature = "0.9",

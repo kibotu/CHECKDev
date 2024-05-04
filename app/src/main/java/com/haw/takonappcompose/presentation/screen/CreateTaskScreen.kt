@@ -346,6 +346,7 @@ private fun SelectRole(
             enabled = true,
             value = selectedRole,
             onValueChange = { },
+            readOnly = true,
             singleLine = true,
             textStyle = TextStyle(fontSize = 16.sp),
             keyboardActions = KeyboardActions(
