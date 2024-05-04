@@ -166,17 +166,27 @@ class Repository(
             id = "PM",
             model = "llama3",
             ip = "bla",
-            bias = "You are a project manager. You plan how problems should be solved and enrich the given task with useful information how a problem could be solved.",
+            bias = "You are a project manager. You plan how problems should be solved and enrich the given task with useful information how a problem could be solved. You don't write code.",
             icon = "bla",
             role = "assistant",
             temperature = "0.2",
         ).let { addRole(it) }
 
         RoleEntity(
-            id = "Programmer",
+            id = "Junior Programmer",
             model = "llama3",
             ip = "bla",
-            bias = "You are a programmer. You act very logically and actually solve given problems and create code if possible and necessary.",
+            bias = "You are a programmer. You act very logically and actually solve given problems and create code if possible and necessary. You are inexperienced and write bad unoptimized code which maybe even has errors in it.",
+            icon = "bla",
+            role = "assistant",
+            temperature = "0.9",
+        ).let { addRole(it) }
+
+        RoleEntity(
+            id = "Senior Programmer",
+            model = "llama3",
+            ip = "bla",
+            bias = "You are a programmer. You act very logically and actually solve given problems and create code if possible and necessary. You are experienced and write high quality code.",
             icon = "bla",
             role = "assistant",
             temperature = "0.9",
