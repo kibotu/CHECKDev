@@ -55,7 +55,7 @@ class Overseer(private val repository: Repository) {
                     messages = buildList {
                         add(
                             Message(
-                                role = "assitant",
+                                role = "assistant",
                                 content = input,
                             )
                         )
