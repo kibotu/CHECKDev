@@ -110,7 +110,7 @@ private fun ScenarioUI(
     modifier: Modifier = Modifier,
     phases: List<PhasePresentationModel>,
     addPhase: () -> Unit,
-    onUpdatePhase: (RoleEntity, Int) -> Unit,
+    onUpdatePhase: (RoleEntity, Int, Int) -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -123,7 +123,7 @@ private fun ScenarioUI(
                 modifier = Modifier.background(
                     if (index % 2 == 0) Color.LightGray else Color.White,
                 ),
-                onUpdatePhase = onUpdatePhase,
+                onUpdatePhase = { x, y -> onUpdatePhase(x, y, phase.phaseId) },
             )
             if (index != phases.lastIndex) {
                 LongArrow(
@@ -168,6 +168,7 @@ private fun Phase(
         actions.forEachIndexed { index, action ->
             SelectRole(
                 availableRoles = availableRoles,
+                preSelected = action.role,
                 onSelect = { onUpdatePhase(it, index) },
             )
             if (index != actions.lastIndex) {
@@ -245,6 +246,7 @@ private fun LongArrow(
 private fun SelectRole(
     modifier: Modifier = Modifier,
     availableRoles: List<RoleEntity>,
+    preSelected: RoleEntity? = null,
     onSelect: (RoleEntity) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -256,7 +258,7 @@ private fun SelectRole(
     }
     var selectedRole: String by remember {
         mutableStateOf(
-            "",
+            preSelected?.role ?: "",
         )
     }
     val focusManager = LocalFocusManager.current
@@ -364,9 +366,11 @@ val demoActions = listOf(
 
 val phases = listOf(
     PhasePresentationModel(
+        phaseId = 0,
         actions = demoActions,
     ),
     PhasePresentationModel(
+        phaseId = 100,
         actions = demoActions.takeLast(2),
     ),
 )
@@ -381,7 +385,7 @@ fun JobConfigurationScreenPreview() {
                 availableRoles = roles,
                 phases = phases,
                 addPhase = {},
-                onUpdatePhase = { _, _ -> },
+                onUpdatePhase = { _, _, _ -> },
             )
         }
     }

@@ -22,6 +22,7 @@ class GetScenarioUseCase(
                 phasesParsed.add(
                     PhasePresentationModel(
                         actions = phaseActions.toAction(),
+                        phaseId = phase.id,
                     ),
                 )
             }

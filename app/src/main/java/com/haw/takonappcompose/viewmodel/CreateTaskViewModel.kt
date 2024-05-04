@@ -82,12 +82,27 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun updatePhase(roleEntity: RoleEntity, phaseId: Int) {
+    fun updatePhase(roleEntity: RoleEntity, actionIndexInPhase: Int, phaseId: Int) {
         viewModelScope.launch {
+            val updatedPhase = repository.getPhasesById(currentScenarioId).find { it.id == phaseId } ?: PhaseEntity(
+                id = UIDGenerator.newUID(),
+                scenarioId = currentScenarioId,
+            )
+            repository.addPhase(updatedPhase)
+            val changedOrCreatedAction = repository.getActionsByPhaseId(updatedPhase.id).getOrNull(actionIndexInPhase)?.apply {
+                roleId = roleEntity.id
+            } ?: ActionEntity(
+                id = UIDGenerator.newUID(),
+                phaseId = updatedPhase.id,
+                roleId = roleEntity.id,
+                input = null,
+                output = null,
+            )
+            repository.addAction(changedOrCreatedAction)
+
             currentPhases.update {
                 useCase(currentScenarioId)
             }
-//            repository.addPhase()
         }
     }
 }
