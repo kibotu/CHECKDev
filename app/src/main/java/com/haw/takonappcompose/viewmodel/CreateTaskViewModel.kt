@@ -10,6 +10,7 @@ import com.haw.takonappcompose.scenario.datasources.db.ActionEntity
 import com.haw.takonappcompose.scenario.datasources.db.PhaseEntity
 import com.haw.takonappcompose.scenario.datasources.db.ScenarioEntity
 import com.haw.takonappcompose.scenario.domain.usecase.GetScenarioUseCase
+import com.haw.takonappcompose.uuid.UIDGenerator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,10 +52,14 @@ class CreateTaskViewModel : ViewModel(), KoinComponent {
 
     fun appendPhase() {
         viewModelScope.launch {
-            val newPhase = PhaseEntity(scenarioId = currentScenarioId)
+            val newPhase = PhaseEntity(
+                id = UIDGenerator.newUID(),
+                scenarioId = currentScenarioId,
+            )
             repository.addPhase(newPhase)
             repository.addAction(
                 ActionEntity(
+                    id = UIDGenerator.newUID(),
                     roleId = "",
                     input = null,
                     output = null,
