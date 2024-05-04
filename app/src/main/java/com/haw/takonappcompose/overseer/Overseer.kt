@@ -3,7 +3,6 @@ package com.haw.takonappcompose.overseer
 import com.haw.takonappcompose.database.AnswerEntity
 import com.haw.takonappcompose.models.ChatAnswer
 import com.haw.takonappcompose.models.Message
-import com.haw.takonappcompose.models.Options
 import com.haw.takonappcompose.models.Question
 import com.haw.takonappcompose.models.Resource
 import com.haw.takonappcompose.repositories.Repository
@@ -70,8 +69,8 @@ class Overseer(private val repository: Repository) {
                 repository.addAnswer(
                     answerEntity = AnswerEntity(
                         role = "assistant",
-                        content = response.data.message?.content,
-                    ),
+                        content = response.data.message?.content
+                    )
                 )
 
                 return response.data
@@ -79,6 +78,7 @@ class Overseer(private val repository: Repository) {
         } catch (e: Exception) {
             Timber.e(e)
         }
+
 
         return requireNotNull(result)
     }
