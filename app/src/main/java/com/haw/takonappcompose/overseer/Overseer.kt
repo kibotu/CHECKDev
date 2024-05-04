@@ -19,9 +19,12 @@ class Overseer(private val repository: Repository) {
         var previousPhase = phases.first()
         var result = previousPhase.run(task)
 
-        phases.drop(1).forEachIndexed { index, phaseEntity ->
-            result = phaseEntity.run(result.message?.content ?: "no message")
-        }
+        phases
+            .drop(1)
+            .forEachIndexed { index, phaseEntity ->
+                val content = result.message?.content
+                result = phaseEntity.run(content ?: "no message")
+            }
     }
 
     private suspend fun PhaseEntity.run(task: String): ChatAnswer {
@@ -33,7 +36,8 @@ class Overseer(private val repository: Repository) {
         actions
             .drop(1)
             .forEachIndexed { index, actionEntity ->
-                result = actionEntity.run(result.message?.content ?: "no message")
+                val content = result.message?.content
+                result = actionEntity.run(content ?: "no message")
             }
 
         return result

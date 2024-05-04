@@ -143,7 +143,7 @@ class Repository(
             ip = "bla",
             bias = "world conqueror",
             icon = "bla",
-            role = "CEO",
+            role = "assistant",
             temperature = "0.7",
         ).let { addRole(it) }
 
@@ -153,7 +153,7 @@ class Repository(
             ip = "bla",
             bias = "world conquerors helper",
             icon = "bla",
-            role = "PM",
+            role = "assistant",
             temperature = "0.2",
         ).let { addRole(it) }
 
@@ -163,7 +163,7 @@ class Repository(
             ip = "bla",
             bias = "nerdy worker",
             icon = "bla",
-            role = "PROGRAMMER",
+            role = "assistant",
             temperature = "0.9",
         ).let { addRole(it) }
 
@@ -173,7 +173,7 @@ class Repository(
             ip = "bla",
             bias = "picky tester",
             icon = "bla",
-            role = "QA",
+            role = "assistant",
             temperature = "0.9",
         ).let { addRole(it) }
     }

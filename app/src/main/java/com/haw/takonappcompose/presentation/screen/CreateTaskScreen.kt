@@ -317,12 +317,12 @@ private fun SelectRole(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Start,
-                            text = it.role,
+                            text = it.id,
                         )
                     },
                     onClick = {
                         isExpanded = false
-                        selectedRole = it.role
+                        selectedRole = it.id
                         onSelect(it)
                     },
                 )
